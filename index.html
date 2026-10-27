@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小小兵成語大冒險 - Bello Idioms!</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Rounded & Cute Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Noto Sans TC', 'Fredoka', sans-serif;
+            background-color: #FEF3C7;
+            background-image: radial-gradient(#FDE047 15%, transparent 16%), radial-gradient(#FDE047 15%, transparent 16%);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+        }
+
+        /* Ruby formatting for Taiwanese standard Zhuyin */
+        ruby {
+            ruby-position: over;
+            font-size: 1.1em;
+            margin: 0 2px;
+        }
+        rt {
+            font-size: 0.55em;
+            color: #1E40AF;
+            font-weight: 900;
+            user-select: none;
+            letter-spacing: normal;
+        }
+
+        .minion-yellow { background-color: #FACC15; }
+        .minion-blue { background-color: #2563EB; }
+        .minion-denim { background-color: #1E3A8A; }
+
+        .border-minion { border: 4px solid #1E3A8A; }
+        .shadow-minion { box-shadow: 0 8px 0px #1E3A8A; }
+        .shadow-minion-sm { box-shadow: 0 4px 0px #1E3A8A; }
+        
+        .btn-bounce:hover {
+            transform: translateY(-3px) scale(1.02);
+        }
+        .btn-bounce:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0px #1E3A8A;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FEF3C7;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2563EB;
+            border-radius: 10px;
+            border: 2px solid #FEF3C7;
+        }
+
+        @keyframes bounce-gentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-bounce-gentle {
+            animation: bounce-gentle 2.5s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="text-gray-800 min-h-screen flex flex-col pb-10">
+
+    <!-- Header Section -->
+    <header class="bg-amber-400 border-b-8 border-blue-900 shadow-lg sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <!-- Logo & Title -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showSection('learn')">
+                <div class="relative w-12 h-12 bg-yellow-300 rounded-full border-4 border-blue-900 flex items-center justify-center overflow-hidden shadow-inner">
+                    <!-- Minion Eye Vector -->
+                    <div class="w-full h-3 bg-gray-800 absolute top-4"></div>
+                    <div class="w-7 h-7 bg-gray-300 rounded-full border-2 border-gray-700 flex items-center justify-center z-10 shadow">
+                        <div class="w-3 h-3 bg-amber-800 rounded-full border border-black flex items-center justify-center">
+                            <div class="w-1 h-1 bg-white rounded-full translate-x-0.5 -translate-y-0.5"></div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-black text-blue-950 tracking-wide flex items-center gap-2">
+                        小小兵成語大冒險 <span class="text-xs sm:text-sm bg-blue-600 text-yellow-300 px-2 py-0.5 rounded-full font-bold">Bello!</span>
+                    </h1>
+                    <p class="text-xs font-bold text-blue-900">國小 4~6 年級必學 90 組成語大全（第 1, 2, 3 彈）</p>
+                </div>
+            </div>
+
+            <!-- Header Action Controls -->
+            <div class="flex items-center space-x-2 sm:space-x-3 ml-auto">
+                <!-- Banana Progress Badge -->
+                <div class="bg-blue-900 text-yellow-300 px-3 py-1.5 rounded-full font-black text-sm border-2 border-yellow-300 flex items-center gap-1.5 shadow">
+                    <i class="fa-solid fa-banana text-amber-300 text-base"></i>
+                    <span id="banana-count">0</span> / <span id="total-banana-target">90</span> 蕉點
+                </div>
+            </div>
+
+            <!-- Header Action Controls -->
+            <div class="flex items-center space-x-2 sm:space-x-3 ml-auto">
+                <!-- Banana Progress Badge -->
+                <div class="bg-blue-900 text-yellow-300 px-3 py-1.5 rounded-full font-black text-sm border-2 border-yellow-300 flex items-center gap-1.5 shadow">
+                    <i class="fa-solid fa-banana text-amber-300 text-base"></i>
+                    <span id="banana-count">0</span> / <span id="total-banana-target">60</span> 蕉點
+                </div>
+
+                <!-- Navigation Tabs -->
+                <button onclick="showSection('learn')" id="tab-learn" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold border-2 border-blue-950 shadow-minion-sm btn-bounce text-sm sm:text-base flex items-center gap-1">
+                    <i class="fa-solid fa-book-open"></i> 成語庫
+                </button>
+                <button onclick="showSection('quiz')" id="tab-quiz" class="px-4 py-2 bg-yellow-400 text-blue-950 rounded-xl font-bold border-2 border-blue-950 shadow-minion-sm btn-bounce text-sm sm:text-base flex items-center gap-1">
+                    <i class="fa-solid fa-gamepad"></i> 蕉級大挑戰
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-6 flex-grow w-full">
+
+        <!-- ================= SECTION 1: LEARN (成語庫) ================= -->
+        <section id="section-learn" class="space-y-6">
+
+            <!-- Controls: Search, Volume Toggle, Filter, Random -->
+            <div class="bg-white p-4 rounded-2xl border-4 border-blue-900 shadow-minion flex flex-col md:flex-row gap-3 justify-between items-center">
+                <div class="relative w-full md:w-72">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="search-input" placeholder="搜尋成語、解釋或關鍵字..." 
+                           class="w-full pl-10 pr-4 py-2 rounded-xl border-2 border-blue-900 focus:outline-none focus:ring-2 focus:ring-yellow-400 font-bold text-gray-700">
+                </div>
+
+                <!-- Volume Chapter Switcher -->
+                <div class="flex items-center bg-yellow-100 p-1 rounded-xl border-2 border-blue-900 flex-wrap gap-1 md:gap-0">
+                    <button onclick="setVolumeFilter(1)" id="vol-btn-1" class="px-3 py-1.5 rounded-lg font-black text-xs sm:text-sm transition bg-blue-600 text-white shadow-sm">
+                        🍌 第 1 彈 (1~30)
+                    </button>
+                    <button onclick="setVolumeFilter(2)" id="vol-btn-2" class="px-3 py-1.5 rounded-lg font-black text-xs sm:text-sm transition text-blue-950 hover:bg-yellow-200">
+                        ⭐ 第 2 彈 (31~60)
+                    </button>
+                    <button onclick="setVolumeFilter(3)" id="vol-btn-3" class="px-3 py-1.5 rounded-lg font-black text-xs sm:text-sm transition text-blue-950 hover:bg-yellow-200">
+                        🚀 第 3 彈 (61~90)
+                    </button>
+                    <button onclick="setVolumeFilter(0)" id="vol-btn-all" class="px-3 py-1.5 rounded-lg font-black text-xs sm:text-sm transition text-blue-950 hover:bg-yellow-200">
+                        全部 90 組
+                    </button>
+                </div>
+                
+                <div class="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
+                    <button onclick="getRandomIdiom()" class="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-blue-950 rounded-xl font-black border-2 border-blue-900 shadow-minion-sm btn-bounce transition text-sm flex items-center gap-1">
+                        <i class="fa-solid fa-dice"></i> 隨機抽一則
+                    </button>
+                    <button onclick="toggleFavoritesOnly()" id="fav-filter-btn" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-bold border-2 border-blue-900 shadow-minion-sm btn-bounce text-sm flex items-center gap-1">
+                        <i class="fa-solid fa-star text-amber-500"></i> 只看收藏 (<span id="fav-count">0</span>)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Layout: Left List + Right Detail Display -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- Left Column: Idioms List Selector (30 Items) -->
+                <div class="lg:col-span-4 bg-white p-4 rounded-2xl border-4 border-blue-900 shadow-minion flex flex-col h-[550px]">
+                    <div class="flex items-center justify-between pb-3 mb-2 border-b-2 border-gray-200">
+                        <h2 class="text-lg font-black text-blue-900 flex items-center gap-2">
+                            <i class="fa-solid fa-list-ol text-amber-500"></i> 成語列表 (<span id="list-count">30</span>)
+                        </h2>
+                        <span class="text-xs bg-yellow-200 text-amber-900 font-bold px-2 py-0.5 rounded-full">點選即可更換</span>
+                    </div>
+
+                    <!-- Scrollable Idioms List -->
+                    <div id="idiom-list" class="space-y-2 overflow-y-auto pr-1 flex-grow">
+                        <!-- JS injected list items -->
+                    </div>
+                </div>
+
+                <!-- Right Column: Detailed Idiom Card Display -->
+                <div class="lg:col-span-8 flex flex-col space-y-4">
+
+                    <!-- Main Content Card -->
+                    <div id="detail-card" class="bg-white rounded-3xl border-4 border-blue-900 shadow-minion p-6 sm:p-8 relative overflow-hidden transition-all duration-300">
+                        
+                        <!-- Top Bar inside Card -->
+                        <div class="flex justify-between items-start border-b-4 border-yellow-400 pb-4 mb-6">
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2 text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full w-fit border border-blue-200">
+                                    <i class="fa-solid fa-bookmark"></i> 成語編號：<span id="detail-id">01</span> / 90
+                                </div>
+                                <!-- Large Idiom Title with Standard Ruby Zhuyin -->
+                                <h1 id="detail-title" class="text-3xl sm:text-4xl md:text-5xl font-black text-blue-950 tracking-wider leading-relaxed pt-2">
+                                    <!-- Zhuyin HTML injected here -->
+                                </h1>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <!-- TTS Read Audio Button -->
+                                <button onclick="speakCurrentIdiom()" class="p-3 bg-yellow-400 hover:bg-yellow-300 text-blue-950 rounded-2xl border-2 border-blue-900 shadow-minion-sm btn-bounce text-xl" title="發音朗讀">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                </button>
+                                <!-- Bookmark Star Button -->
+                                <button onclick="toggleCurrentFavorite()" id="fav-star-btn" class="p-3 bg-gray-100 hover:bg-yellow-100 text-gray-400 rounded-2xl border-2 border-blue-900 shadow-minion-sm btn-bounce text-xl" title="收藏成語">
+                                    <i class="fa-solid fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Structured Content Section -->
+                        <div class="space-y-6 text-gray-800 text-base sm:text-lg">
+
+                            <!-- 1. 解釋 -->
+                            <div class="bg-amber-50 p-4 rounded-2xl border-2 border-amber-300 space-y-1">
+                                <h3 class="font-black text-amber-900 text-lg flex items-center gap-2">
+                                    <span class="w-7 h-7 bg-amber-400 rounded-lg flex items-center justify-center text-sm text-blue-950"><i class="fa-solid fa-lightbulb"></i></span> 
+                                    【解釋】
+                                </h3>
+                                <p id="detail-meaning" class="font-medium text-gray-800 leading-relaxed pl-9">
+                                    <!-- Text injected -->
+                                </p>
+                            </div>
+
+                            <!-- 2. 典故與出處 -->
+                            <div class="bg-blue-50 p-4 rounded-2xl border-2 border-blue-200 space-y-2">
+                                <div class="flex items-center justify-between flex-wrap gap-2">
+                                    <h3 class="font-black text-blue-950 text-lg flex items-center gap-2">
+                                        <span class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center text-sm text-white"><i class="fa-solid fa-book-bookmark"></i></span> 
+                                        【典故故事】
+                                    </h3>
+                                    <!-- Source Reference Tag -->
+                                    <span id="detail-source" class="text-xs font-bold text-blue-800 bg-blue-200 px-3 py-1 rounded-full border border-blue-300">
+                                        出處：《史記》
+                                    </span>
+                                </div>
+                                <p id="detail-history" class="font-medium text-gray-700 leading-relaxed pl-1 sm:pl-9 text-base">
+                                    <!-- Text injected -->
+                                </p>
+                            </div>
+
+                            <!-- 3. 造句範例 -->
+                            <div class="bg-emerald-50 p-4 rounded-2xl border-2 border-emerald-300 space-y-1">
+                                <h3 class="font-black text-emerald-900 text-lg flex items-center gap-2">
+                                    <span class="w-7 h-7 bg-emerald-500 rounded-lg flex items-center justify-center text-sm text-white"><i class="fa-solid fa-pen-nib"></i></span> 
+                                    【造句範例】
+                                </h3>
+                                <p id="detail-sentence" class="font-medium text-emerald-950 leading-relaxed pl-9 italic">
+                                    <!-- Text injected -->
+                                </p>
+                            </div>
+
+                            <!-- 4. 小小兵生活運用 -->
+                            <div class="bg-yellow-100 p-4 rounded-2xl border-2 border-yellow-400 space-y-1 relative">
+                                <div class="absolute -top-3 right-4 bg-yellow-400 text-blue-950 text-xs font-black px-2 py-0.5 rounded-full border border-blue-900 shadow">
+                                    Bello! 超實用情境
+                                </div>
+                                <h3 class="font-black text-blue-950 text-lg flex items-center gap-2">
+                                    <span class="w-7 h-7 bg-yellow-400 rounded-lg flex items-center justify-center text-sm text-blue-950"><i class="fa-solid fa-banana text-blue-900"></i></span> 
+                                    【生活運用】
+                                </h3>
+                                <p id="detail-life" class="font-medium text-gray-800 leading-relaxed pl-9">
+                                    <!-- Text injected -->
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <!-- Card Footer Navigation -->
+                        <div class="mt-8 pt-4 border-t-2 border-gray-100 flex justify-between items-center">
+                            <button onclick="navigateIdiom(-1)" class="px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-900 rounded-xl font-bold border-2 border-blue-900 shadow-minion-sm btn-bounce text-sm flex items-center gap-1">
+                                <i class="fa-solid fa-arrow-left"></i> 上一個成語
+                            </button>
+                            <span class="text-xs font-bold text-gray-500">鍵盤左右鍵也可換頁喔！</span>
+                            <button onclick="navigateIdiom(1)" class="px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-900 rounded-xl font-bold border-2 border-blue-900 shadow-minion-sm btn-bounce text-sm flex items-center gap-1">
+                                下一個成語 <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <!-- Minion Mascot Companion Dialog Box -->
+                    <div class="bg-amber-300 p-4 rounded-2xl border-4 border-blue-900 shadow-minion flex items-center gap-4 animate-bounce-gentle">
+                        <div class="w-14 h-14 bg-yellow-400 rounded-full border-4 border-blue-900 flex-shrink-0 flex items-center justify-center relative shadow">
+                            <i class="fa-solid fa-face-laugh-beam text-3xl text-blue-950"></i>
+                            <div class="absolute -bottom-1 bg-blue-600 text-yellow-300 text-[10px] font-black px-1 rounded">Bob</div>
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="font-black text-blue-950 text-sm">小小兵隊長 Bob 的成語隨堂碎碎唸：</h4>
+                            <p id="minion-quote" class="text-xs sm:text-sm font-bold text-blue-900">
+                                Bello! 讀完這組成語，記得點擊右上角的喇叭聽聽看正確發音喔！Po-ka!
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= SECTION 2: QUIZ (蕉級大挑戰) ================= -->
+        <section id="section-quiz" class="hidden space-y-6">
+            <div class="max-w-3xl mx-auto bg-white rounded-3xl border-4 border-blue-900 shadow-minion p-6 sm:p-10 relative">
+                
+                <!-- Quiz Header -->
+                <div class="text-center space-y-2 border-b-4 border-yellow-400 pb-6 mb-6">
+                    <span class="bg-yellow-400 text-blue-950 px-4 py-1 rounded-full font-black text-xs uppercase tracking-widest border border-blue-900">
+                        Banana Quiz Challenge
+                    </span>
+                    <h2 class="text-3xl font-black text-blue-950">🍌 蕉級成語大考驗</h2>
+                    <p class="text-sm font-bold text-gray-600">看看你掌握了多少成語知識，答對可獲得額外香蕉點數！</p>
+                </div>
+
+                <!-- Quiz Active Screen -->
+                <div id="quiz-active" class="space-y-6">
+                    <div class="flex justify-between items-center text-sm font-black text-blue-900">
+                        <span bg-blue-100 px-3 py-1 rounded-full border>題目 <span id="quiz-current-num">1</span> / 5</span>
+                        <span class="text-amber-600"><i class="fa-solid fa-trophy"></i> 目前得分：<span id="quiz-score">0</span></span>
+                    </div>
+
+                    <!-- Question Container -->
+                    <div class="bg-amber-50 p-6 rounded-2xl border-2 border-amber-300">
+                        <h3 id="quiz-question" class="text-xl font-black text-blue-950 leading-relaxed">
+                            題目加載中...
+                        </h3>
+                    </div>
+
+                    <!-- Options Grid -->
+                    <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Options injected by JS -->
+                    </div>
+
+                    <!-- Feedback Box -->
+                    <div id="quiz-feedback" class="hidden p-4 rounded-2xl font-bold text-center text-lg border-2"></div>
+                </div>
+
+                <!-- Quiz Result Screen -->
+                <div id="quiz-result" class="hidden text-center space-y-6 py-6">
+                    <div class="text-6xl text-amber-500 animate-bounce">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                    <h3 class="text-3xl font-black text-blue-950">測驗完成！</h3>
+                    <p id="quiz-final-score" class="text-xl font-bold text-gray-700">
+                        你在 5 題中答對了 <span class="text-amber-600 text-3xl font-black">0</span> 題！
+                    </p>
+                    <p id="quiz-comment" class="text-base font-bold text-blue-900 bg-yellow-100 p-4 rounded-xl border-2 border-yellow-300">
+                        Banana! 再接再厲，多讀幾次成語典故會更厲害喔！
+                    </p>
+                    <button onclick="startQuiz()" class="px-8 py-3 bg-yellow-400 hover:bg-yellow-300 text-blue-950 font-black text-lg rounded-2xl border-4 border-blue-900 shadow-minion btn-bounce">
+                        <i class="fa-solid fa-rotate-right"></i> 再挑戰一次
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        /* 
+         *  30 Verified Idioms Database for Taiwanese Elementary School Grades 4-6
+         *  Each entry contains: 
+         *  - titleHtml: standard Chinese with standard <ruby> Zhuyin tags for difficult/key characters
+         *  - plainTitle: text-only title for search
+         *  - meaning: concise explanation
+         *  - source: historical origin reference
+         *  - history: engaging historical allusion retelling
+         *  - sentence: practical example sentence
+         *  - life: everyday life application scenario
+         */
+        const idiomData = [
+            {
+                id: 1,
+                titleHtml: '<ruby>守<rt>ㄕㄡˇ</rt></ruby><ruby>株<rt>ㄓㄨ</rt></ruby><ruby>待<rt>ㄉㄞˋ</rt></ruby><ruby>兔<rt>ㄊㄨˋ</rt></ruby>',
+                plainTitle: '守株待兔',
+                meaning: '比喻拘泥守舊，不知變通；或是企圖不經過努力，全憑僥倖獲得成功。',
+                source: '《韓非子·五蠹》',
+                history: '戰國時期，宋國有個農夫在田裡耕作。突然有一隻兔子飛快地跑過來，不小心撞在田邊的樹幹上，折斷脖子死了。農夫白白撿到一隻肥兔，非常高興，於是放下農具，每天守在樹幹旁，希望再撿到兔子。結果再也沒等到兔子，田地卻荒廢了，還被全國的人嘲笑。',
+                sentence: '我們學習知識要主動積極，不能抱著守株待兔的心態等待考試答案。',
+                life: '小明每次考前都不複習，只希望老師出他剛好會的題目，這種守株待兔的想法太危險了！'
+            },
+            {
+                id: 2,
+                titleHtml: '<ruby>畫<rt>ㄏㄨㄚˋ</rt></ruby><ruby>蛇<rt>ㄕㄜˊ</rt></ruby><ruby>添<rt>ㄊㄧㄢ</rt></ruby><ruby>足<rt>ㄗㄨˊ</rt></ruby>',
+                plainTitle: '畫蛇添足',
+                meaning: '比喻多此一舉，做多餘的事，反而把事情弄糟。',
+                source: '《戰國策·齊策二》',
+                history: '楚國有位祠堂主人賞賜給辦事人員一壺酒。大家覺得酒不夠分，決定在地上畫蛇，最先畫好的人可以獨得這壺酒。有一人很快畫好了蛇，拿過酒壺正準備喝，見別人還沒畫完，就左手拿酒壺，右手給蛇畫腳。腳還沒畫完，另一人已經把蛇畫好並搶走酒壺說：「蛇本來就沒有腳，你怎麼能給它添腳呢？」',
+                sentence: '這幅畫色彩已經很和諧了，你若再塗上黃色，豈不是畫蛇添足？',
+                life: '寫作文結尾時已經很完美了，小華非要加上一段不相關的話，結果反而被老師說是畫蛇添足。'
+            },
+            {
+                id: 3,
+                titleHtml: '<ruby>揠<rt>ㄧㄚˋ</rt></ruby><ruby>苗<rt>ㄇㄧㄠˊ</rt></ruby><ruby>助<rt>ㄓㄨˋ</rt></ruby><ruby>長<rt>ㄓㄤˇ</rt></ruby>',
+                plainTitle: '揠苗助長',
+                meaning: '比喻為求急功近利，反而把事情弄糟糕（亦作「拔苗助長」）。',
+                source: '《孟子·公孫丑上》',
+                history: '宋國有一個農夫，總是嫌自己田裡的禾苗長得太慢。有一天，他想出一個點子，一口氣把田裡的禾苗全部往上拔高了一截。他累得氣喘吁吁回到家說：「今天可把我累壞了，我幫禾苗長高了！」他的兒子聽了連忙跑到田裡一看，禾苗已經全部枯死了。',
+                sentence: '培養良好習慣需要時間累積，父母如果急於求成，無異於揠苗助長。',
+                life: '為了下週的跑步比賽，小兵今晚一口氣跑了二十公里，結果雙腿拉傷，這真是揠苗助長！'
+            },
+            {
+                id: 4,
+                titleHtml: '<ruby>井<rt>ㄐㄧㄥˇ</rt></ruby><ruby>底<rt>ㄉㄧˇ</rt></ruby><ruby>之<rt>ㄓ</rt></ruby><ruby>蛙<rt>ㄨㄚ</rt></ruby>',
+                plainTitle: '井底之蛙',
+                meaning: '比喻眼界狹小、見識短淺的人。',
+                source: '《莊子·秋水》',
+                history: '廢井裡住著一隻青蛙，它對東海的大鱉炫耀說：「你看我在這井裡多快樂，獨占一井水！」大鱉聽了便告訴它大海的廣闊：幾千里寬、幾千仞深，大水大旱都不受影響。青蛙聽完後驚呆了，才知道自己住的井有多麼渺小。',
+                sentence: '我們要多閱讀書籍、開闊視野，千萬不要做井底之蛙。',
+                life: '小強以為自己的羽毛球打得最好，直到參加全校比賽才發現高手如雲，頓時覺得自己以前真是井底之蛙。'
+            },
+            {
+                id: 5,
+                titleHtml: '<ruby>自<rt>ㄗˋ</rt></ruby><ruby>相<rt>ㄒㄧㄤ</rt></ruby><ruby>矛<rt>ㄇㄠˊ</rt></ruby><ruby>盾<rt>ㄉㄨㄣˋ</rt></ruby>',
+                plainTitle: '自相矛盾',
+                meaning: '比喻自己的言語或行為前後不一致，互相牴觸。',
+                source: '《韓非子·難一》',
+                history: '楚國有人賣矛與盾，他先誇口說：「我的盾最堅固，任何銳利的武器都刺不穿！」接著又誇口說：「我的矛最銳利，任何堅固的盾都能刺穿！」旁人問他：「如果用你的矛去刺你的盾，會怎麼樣呢？」那個人頓時啞口無言。',
+                sentence: '你一方面說要節約開支，一方面又購買昂貴玩具，豈不是自相矛盾？',
+                life: '班長剛說要大家保持安靜，自己卻大聲跟旁邊同學聊天，這種行為真是自相矛盾！'
+            },
+            {
+                id: 6,
+                titleHtml: '<ruby>掩<rt>ㄧㄢˇ</rt></ruby><ruby>耳<rt>ㄦˇ</rt></ruby><ruby>盜<rt>ㄉㄠˋ</rt></ruby><ruby>鈴<rt>ㄌㄧㄥˊ</rt></ruby>',
+                plainTitle: '掩耳盜鈴',
+                meaning: '比喻自欺欺人，以為自己聽不到或看不到，別人也就不知道。',
+                source: '《呂氏春秋·自知》',
+                history: '春秋時期，有人想偷走人家門口的大鐘，但鐘太大搬不動，他就想把鐘砸碎分批偷走。沒想到用鎚子一敲，鐘發出巨響。他害怕聲音惹來警察，便連忙摀住自己的耳朵，以為自己聽不到，別人也就聽不到了。',
+                sentence: '考試抄襲答案以為老師沒發現，這種行為純粹是掩耳盜鈴。',
+                life: '小紅把沒吃完的蔬菜藏在盤子底下以為媽媽看不見，這簡直是掩耳盜鈴的小聰明。'
+            },
+            {
+                id: 7,
+                titleHtml: '<ruby>杯<rt>ㄅㄟ</rt></ruby><ruby>弓<rt>ㄍㄨㄥ</rt></ruby><ruby>蛇<rt>ㄕㄜˊ</rt></ruby><ruby>影<rt>ㄧㄥˇ</rt></ruby>',
+                plainTitle: '杯弓蛇影',
+                meaning: '比喻因疑神疑鬼而引起不必要的驚恐。',
+                source: '《風俗通義·怪神》',
+                history: '晉朝人樂廣請朋友喝茶，朋友看見茶杯裡有一條小蛇在蠕動，不敢不喝，喝完回家後疑心生病。樂廣得知後調查原因，發現原來是客廳牆上掛著一張弓，弓的倒影剛好落在茶杯裡。樂廣把朋友請來再看一次，朋友這才明白真相，病立馬好了。',
+                sentence: '那只是樹枝在風中晃動的影子，你不要杯弓蛇影、嚇唬自己。',
+                life: '晚上房間裡有一道黑影，小明以為有妖怪嚇得不敢睡，打開燈才發現是衣架，真是杯弓蛇影！'
+            },
+            {
+                id: 8,
+                titleHtml: '<ruby>亡<rt>ㄨㄤˊ</rt></ruby><ruby>羊<rt>ㄧㄤˊ</rt></ruby><ruby>補<rt>ㄅㄨˇ</rt></ruby><ruby>牢<rt>ㄌㄠˊ</rt></ruby>',
+                plainTitle: '亡羊補牢',
+                meaning: '比喻犯錯或遭遇損失後，及時採取補救措施，還不算太晚。',
+                source: '《戰國策·楚策四》',
+                history: '養羊人發現羊圈破了個窟窿，夜裡丟了一隻羊。鄰居勸他修補羊圈，他說羊已經丟了修它幹嘛。第二天夜裡狼又抓走了一隻羊。養羊人這才後悔，趕緊把窟窿堵上、修好羊圈，從此羊再也沒有丟過。',
+                sentence: '這次段考雖然考砸了，但只要現在開始努力補習，亡羊補牢猶未為晚。',
+                life: '自行車鏈條掉過一次後，小剛立刻檢查並上油，亡羊補牢預防了下次上學路上壞車。'
+            },
+            {
+                id: 9,
+                titleHtml: '<ruby>狐<rt>ㄏㄨˊ</rt></ruby><ruby>假<rt>ㄐㄧㄚˇ</rt></ruby><ruby>虎<rt>ㄏㄨˇ</rt></ruby><ruby>威<rt>ㄨㄟ</rt></ruby>',
+                plainTitle: '狐假虎威',
+                meaning: '比喻藉著有權者或有勢者的威勢來欺壓他人、威嚇別人。',
+                source: '《戰國策·楚策一》',
+                history: '老虎抓到了狐狸，狐狸騙老虎說：「我是天帝派來管理百獸的，你若吃我會得罪天帝！不信你跟我走，看動物們怕不怕我。」老虎便跟著狐狸走，森林裡的野獸看到老虎都嚇得逃跑，老虎以為動物們真的害怕狐狸，卻不知大家怕的是自己。',
+                sentence: '他只不過是社長的助手，卻經常狐假虎威地對隊員發號施令。',
+                life: '弟弟仗著媽媽在旁邊，就對哥哥吐舌頭搶玩具，這種狐假虎威的樣子讓人又氣又好笑。'
+            },
+            {
+                id: 10,
+                titleHtml: '<ruby>買<rt>買</rt></ruby><ruby>櫝<rt>ㄉㄨˊ</rt></ruby><ruby>還<rt>ㄏㄨㄢˊ</rt></ruby><ruby>珠<rt>ㄓㄨ</rt></ruby>',
+                plainTitle: '買櫝還珠',
+                meaning: '比喻沒有眼光，只看重外表而捨棄了真正有價值的主體內容。',
+                source: '《韓非子·外儲說左上》',
+                history: '楚國有一個商人要把珍珠賣給鄭國人。他用珍貴木材做了一個漂亮的盒子（櫝），用香料薰香，還鑲嵌了珠寶裝飾。鄭國人買下後，把盒子裡的珍珠退還給商人，只把精美的盒子抱走了。',
+                sentence: '購買書籍應該注重裡面的內容知識，只看精美封面而買下簡直是買櫝還珠。',
+                life: '小美買這包文具只是因為外包裝盒很可愛，裡面的筆根本不能用，真是買櫝還珠！'
+            },
+            {
+                id: 11,
+                titleHtml: '<ruby>盲<rt>ㄇㄤˊ</rt></ruby><ruby>人<rt>ㄖㄣˊ</rt></ruby><ruby>摸<rt>ㄇㄛ</rt></ruby><ruby>象<rt>ㄒㄧㄤˋ</rt></ruby>',
+                plainTitle: '盲人摸象',
+                meaning: '比喻看問題不全面，以偏概全，只憑局部現象就下結論。',
+                source: '《大般涅槃經》卷三十',
+                history: '國王讓幾個盲人摸大象。摸到牙齒的人說大象像蘿蔔；摸到耳朵的人說大象像簸箕；摸到腿的人說像柱子；摸到背的人說像床；摸到尾巴的人說像繩子。大家爭論不休，其實他們都只摸到了大象的一小部分。',
+                sentence: '我們研究事情要綜觀全貌，不能像盲人摸象一樣下斷語。',
+                life: '只看了這部電影的三分鐘預告就評斷它是爛片，這樣看問題未免太盲人摸象了。'
+            },
+            {
+                id: 12,
+                titleHtml: '<ruby>刻<rt>ㄎㄜˋ</rt></ruby><ruby>舟<rt>ㄓㄡ</rt></ruby><ruby>求<rt>ㄑㄧㄡˊ</rt></ruby><ruby>劍<rt>ㄐㄧㄢˋ</rt></ruby>',
+                plainTitle: '刻舟求劍',
+                meaning: '比喻拘泥於固有的成法，不知根據客觀情況的變化而變通。',
+                source: '《呂氏春秋·察今》',
+                history: '楚國有人坐船過江，不小心把寶劍掉進了江水裡。他立刻拿出小刀在船舷掉劍的地方刻了一個記號，說：「我的劍是從這裡掉下去的。」等船靠岸停止後，他順著船上刻下記號的地方跳入水中撈劍，自然什麼也找不到。',
+                sentence: '環境一直在變，如果我們解決問題還用老方法，就是刻舟求劍了。',
+                life: '遊戲地圖都更新改版了，你還按照舊路線走，當然找不到寶箱，簡直是刻舟求劍！'
+            },
+            {
+                id: 13,
+                titleHtml: '<ruby>臥<rt>ㄨㄛˋ</rt></ruby><ruby>薪<rt>ㄒㄧㄣ</rt></ruby><ruby>嚐<rt>ㄔㄤˊ</rt></ruby><ruby>膽<rt>ㄉㄢˇ</rt></ruby>',
+                plainTitle: '臥薪嚐膽',
+                meaning: '比喻刻苦自勵，發憤圖強，立志雪恥或實現遠大目標。',
+                source: '《史記·越王勾踐世家》',
+                history: '春秋時期，越國被吳國打敗，越王勾踐成為階下囚。回國後，他睡在柴草上（臥薪），並在座位前懸掛苦膽，每天吃飯前都要嚐一嚐膽的苦味（嚐膽），以此提醒自己不忘敗國之恥。經過長期發憤圖強，最終滅掉吳國。',
+                sentence: '經過這次失利，隊員們臥薪嚐膽努力訓練，終於在今年奪得全國冠軍。',
+                life: '上學期數學考砸後，小傑臥薪嚐膽每天多做三十題練習，這學期終於拿下滿分！'
+            },
+            {
+                id: 14,
+                titleHtml: '<ruby>聞<rt>ㄨㄣˊ</rt></ruby><ruby>雞<rt>ㄐㄧ</rt></ruby><ruby>起<rt>ㄑㄧˇ</rt></ruby><ruby>舞<rt>ㄨˇ</rt></ruby>',
+                plainTitle: '聞雞起舞',
+                meaning: '聽到公雞報曉就起床練劍。比喻有志之士及時奮發努力。',
+                source: '《晉書·祖逖傳》',
+                history: '東晉時期，青年祖逖與好友劉琨抱有報效國家的遠大志向。一天半夜公雞啼叫，祖逖把劉琨叫醒說：「這是催促我們上進的聲音！」於是兩人起床在院子裡拔劍練武。後來他們都成為國家重臣。',
+                sentence: '運動員們聞雞起舞，每天清晨五點就開始進行嚴格的體能訓練。',
+                life: '為了準備英語演講比賽，小英每天聞雞起舞，早起大聲朗讀課文。'
+            },
+            {
+                id: 15,
+                titleHtml: '<ruby>三<rt>ㄙㄢ</rt></ruby><ruby>顧<rt>ㄍㄨˋ</rt></ruby><ruby>茅<rt>ㄇㄠˊ</rt></ruby><ruby>廬<rt>ㄌㄨˊ</rt></ruby>',
+                plainTitle: '三顧茅廬',
+                meaning: '比喻誠心誠意地一再邀請或拜訪賢能的人。',
+                source: '《三國志·蜀書·諸葛亮傳》',
+                history: '東漢末年，劉備急需傑出人才，得知諸葛亮隱居隆中，便帶著關羽、張飛前往拜訪。前兩次都沒見到人，直到第三次去，諸葛亮才被劉備的真誠打動，出來相見並提出了著名的「隆中對」，輔佐劉備建立蜀漢。',
+                sentence: '校長三顧茅廬，終於請到了這位著名的科學家來為全校師生演講。',
+                life: '為了請到班上畫畫最厲害的小林幫忙設計壁報，班長三顧茅廬才說服他加入。'
+            },
+            {
+                id: 16,
+                titleHtml: '<ruby>破<rt>ㄆㄛˋ</rt></ruby><ruby>釜<rt>ㄈㄨˇ</rt></ruby><ruby>沉<rt>ㄔㄣˊ</rt></ruby><ruby>舟<rt>ㄓㄡ</rt></ruby>',
+                plainTitle: '破釜沉舟',
+                meaning: '比喻下定決心，不留退路，拼死一戰以求取勝利。',
+                source: '《史記·項羽本紀》',
+                history: '秦朝末年，項羽率軍救援巨鹿。過河之後，項羽下令把船隻全部沉入江底（沉舟），把煮飯的鍋子全砸碎（破釜），只帶三天的乾糧，表示絕不後退。楚軍士氣大振，以一當十，最終大破秦軍。',
+                sentence: '面對這場關鍵的全省決賽，我們全隊抱著破釜沉舟的決心全力以赴。',
+                life: '小明把手機交給媽媽保管，破釜沉舟地封鎖所有社交軟體，專心準備即將到來的段考。'
+            },
+            {
+                id: 17,
+                titleHtml: '<ruby>草<rt>󠁣ㄠˇ</rt></ruby><ruby>木<rt>ㄇㄨˋ</rt></ruby><ruby>皆<rt>ㄐㄧㄝ</rt></ruby><ruby>兵<rt>ㄅㄧㄥ</rt></ruby>',
+                plainTitle: '草木皆兵',
+                meaning: '形容人心虛極度驚恐時，疑神疑鬼，把草木都看成是敵兵。',
+                source: '《晉書·苻堅載記》',
+                history: '東晉時期肥水之戰中，前秦皇帝苻堅率大軍進攻晉軍。晉軍將領謝玄設計大敗前秦軍。苻堅逃跑途中敗退至八公山，望向山上風吹草動的樹木雜草，以為全都是晉軍的埋伏，驚恐萬分。',
+                sentence: '看過恐怖電影後，他獨自走在黑夜裡簡直是草木皆兵，連樹葉落地都嚇一跳。',
+                life: '打破家裡的碗之後，小剛心虛得草木皆兵，媽媽稍微提高聲音他就以為被發現了。'
+            },
+            {
+                id: 18,
+                titleHtml: '<ruby>指<rt>ㄓˇ</rt></ruby><ruby>鹿<rt>ㄌㄨˋ</rt></ruby><ruby>為<rt>ㄨㄟˊ</rt></ruby><ruby>馬<rt>ㄇㄚˇ</rt></ruby>',
+                plainTitle: '指鹿為馬',
+                meaning: '比喻故意顛倒黑白，混淆是非。',
+                source: '《史記·秦始皇本紀》',
+                history: '秦朝宰相趙高想篡位，為了測試朝中大臣誰敢反對他，牽了一隻鹿到秦二世面前說：「這是馬。」二世笑著說這明明是鹿。趙高問群臣，害怕趙高的人紛紛說是馬，堅持說是鹿的人後來都被趙高暗中害死。',
+                sentence: '事實擺在眼前，你再怎麼指鹿為馬也無法掩蓋真相。',
+                life: '大家都看見是他摔壞了公用器材，他居然還指鹿為馬說是桌子自己壞掉的，太無理取鬧了。'
+            },
+            {
+                id: 19,
+                titleHtml: '<ruby>程<rt>ㄔㄥˊ</rt></ruby><ruby>門<rt>門</rt></ruby><ruby>立<rt>ㄌㄧˋ</rt></ruby><ruby>雪<rt>ㄒㄩㄝˇ</rt></ruby>',
+                plainTitle: '程門立雪',
+                meaning: '比喻尊師重道，虔誠地向老師求教。',
+                source: '《宋史·楊時傳》',
+                history: '北宋學者楊時和游酢去拜訪著名學者程頤請教學問。到了程家時，正好趕上程頤在打瞌睡。為了不打擾老師休息，兩人安靜地站在門外恭候。當時外面下著大雪，等程頤醒來時，門外的積雪已經一尺多厚了。',
+                sentence: '古人程門立雪的精神，值得我們現在每一位學生學習。',
+                life: '小美為了向美術老師請教繪畫技巧，在辦公室門口耐心等待了一整節課，這種程門立雪的精神讓人佩服。'
+            },
+            {
+                id: 20,
+                titleHtml: '<ruby>畫<rt>ㄏㄨㄚˋ</rt></ruby><ruby>龍<rt>ㄌㄨㄥˊ</rt></ruby><ruby>點<rt>ㄉㄧㄢˇ</rt></ruby><ruby>睛<rt>ㄐㄧㄥ</rt></ruby>',
+                plainTitle: '畫龍點睛',
+                meaning: '比喻在文章或說話的關鍵處加上一兩句精闢的話，使內容更加生動有力。',
+                source: '唐·張彥遠《歷代名畫記》',
+                history: '南北朝時期的畫家張僧繇在金陵安樂寺牆壁上畫了四條白龍，但都沒畫眼睛。人們問他原因，他說：「畫上眼睛龍就會飛走。」大家不信，他便提起筆給其中兩條龍點上眼睛。頓時雷電交加，兩條龍騰空飛去，沒點眼睛的兩條龍還留在牆上。',
+                sentence: '這篇文章結構嚴謹，最後結尾那句話更是起到了畫龍點睛的作用。',
+                life: '海報原本有點單調，小李加上這句生動的標語後，瞬間起了畫龍點睛的效果！'
+            },
+            {
+                id: 21,
+                titleHtml: '<ruby>完<rt>ㄨㄢˊ</rt></ruby><ruby>璧<rt>ㄅㄧˋ</rt></ruby><ruby>歸<rt>ㄍㄨㄟ</rt></ruby><ruby>趙<rt>ㄓㄠˋ</rt></ruby>',
+                plainTitle: '完璧歸趙',
+                meaning: '比喻將原物完好無損地歸還給原主。',
+                source: '《史記·廉頗藺相如列傳》',
+                history: '戰國時期，秦國想用十五座城池交換趙國的珍寶「和氏璧」。趙國大臣藺相如帶璧出使秦國，發現秦王根本沒有給城池的誠意，便憑藉智慧與勇氣在秦國朝堂上威脅撞碎和氏璧，最後派人秘密將和氏璧完好地送回趙國。',
+                sentence: '請你放心把這本書借給我，我讀完後一定完璧歸趙。',
+                life: '借了同學的昂貴彩色筆，小華用完後仔細檢查並完璧歸趙，獲得了同學的信任。'
+            },
+            {
+                id: 22,
+                titleHtml: '<ruby>世<rt>ㄕˋ</rt></ruby><ruby>外<rt>ㄨㄞˋ</rt></ruby><ruby>桃<rt>ㄊㄠˊ</rt></ruby><ruby>源<rt>ㄩㄢˊ</rt></ruby>',
+                plainTitle: '世外桃源',
+                meaning: '比喻風景優美、環境安寧、遠離世俗紛擾的理想勝地。',
+                source: '晉·陶淵明《桃花源記》',
+                history: '東晉詩人陶淵明寫過一位武陵漁夫的故事。漁夫划船迷路，無意中進入一個開滿桃花的溪谷，穿過山洞後發現一個美麗和平的村莊。那裡的人們生活幸福安樂，不知有漢魏秦朝。漁夫離開後再也找不到這個地方。',
+                sentence: '這個偏遠的小山村風景秀麗、空氣清新，真是個世外桃源。',
+                life: '走進這間充滿花草與書香的閱讀室，感覺就像來到了世外桃源一樣平靜舒適。'
+            },
+            {
+                id: 23,
+                titleHtml: '<ruby>杞<rt>ㄑㄧˇ</rt></ruby><ruby>人<rt>ㄖㄣˊ</rt></ruby><ruby>憂<rt>ㄧㄡ</rt></ruby><ruby>天<rt>ㄊㄧㄢ</rt></ruby>',
+                plainTitle: '杞人憂天',
+                meaning: '比喻缺乏根據或不必要的憂慮與擔心。',
+                source: '《列子·天瑞》',
+                history: '春秋時期杞國有一個人，總是擔心天會塌下來、地會陷下去，自己會沒地方住，整天吃不下飯、睡不著覺。朋友開導他：「天是由氣體積聚成的，地是由土塊積聚成的，絕對不會塌陷。」他這才放下心來。',
+                sentence: '飛機是目前最安全的交通工具之一，你擔心它會掉下來純粹是杞人憂天。',
+                life: '明明天氣預報說今天晴空萬里，小明卻一直擔心會下大雨，真是杞人憂天。'
+            },
+            {
+                id: 24,
+                titleHtml: '<ruby>塞<rt>ㄙㄞˋ</rt></ruby><ruby>翁<rt>ㄨㄥ</rt></ruby><ruby>失<rt>ㄕ</rt></ruby><ruby>馬<rt>ㄇㄚˇ</rt></ruby>',
+                plainTitle: '塞翁失馬',
+                meaning: '比喻壞事在一定條件下可能變成好事，或好事變成壞事（常連用「焉知非福」）。',
+                source: '《淮南子·人間訓》',
+                history: '邊塞一位老翁丟失了一匹好馬，大家來安慰他，老翁說：「這難道不是福氣嗎？」幾個月後，那匹馬帶回了一匹胡地駿馬。老翁兒子騎駿馬摔斷了腿，大家來慰問，老翁說：「這難道不是福氣嗎？」後來邊境爆發戰爭，年輕人大多戰死，兒子因為腿傷留在家中保全了性命。',
+                sentence: '雖然這次比賽輸了，但讓我們發現了自己的缺點，真是塞翁失馬焉知非福。',
+                life: '今天沒趕上公車，結果路上剛好遇到多年沒見的小學好友，真是塞翁失馬！'
+            },
+            {
+                id: 25,
+                titleHtml: '<ruby>鑿<rt>ㄗㄠˊ</rt></ruby><ruby>壁<rt>ㄅㄧˋ</rt></ruby><ruby>偷<rt>ㄊㄡ</rt></ruby><ruby>光<rt>ㄍㄨㄤ</rt></ruby>',
+                plainTitle: '鑿壁偷光',
+                meaning: '形容家境貧寒但勤奮好學的精神。',
+                source: '《西京雜記》卷二',
+                history: '西漢學者匡衡小時候家裡非常貧窮，買不起燈油夜讀。他發現鄰居家晚上點著蠟燭，於是在牆壁上鑿開一個小孔，引鄰居家的燭光透過來照亮書本閱讀。憑藉這種刻苦精神，他最終成為著名的學問家。',
+                sentence: '古人鑿壁偷光的情景雖然艱苦，但他們勤學的精神永遠值得我們學習。',
+                life: '小剛雖然家境並不富裕，但他憑著鑿壁偷光般的刻苦勁頭，考上了第一志願。'
+            },
+            {
+                id: 26,
+                titleHtml: '<ruby>水<rt>ㄕㄨㄟˇ</rt></ruby><ruby>滴<rt>ㄉㄧ</rt></ruby><ruby>石<rt>ㄕˊ</rt></ruby><ruby>穿<rt>ㄔㄨㄢ</rt></ruby>',
+                plainTitle: '水滴石穿',
+                meaning: '比喻力量雖小，只要堅持不懈，就能克服困難，取得成功。',
+                source: '《漢書·枚乘傳》',
+                history: '宋朝縣令張乖崖看見一個小官偷了府庫的一文錢，要懲罰他。小官不服氣說：「一文錢有什麼了不起，你憑什麼打我？」張乖崖寫下判詞：「一日一錢，千日千錢；繩鋸木斷，水滴石穿。」意思是水滴雖然微弱，天長日久也能把石頭滴穿。',
+                sentence: '只要我們每天堅持練習彈琴，水滴石穿，總有一天能彈出動聽的樂曲。',
+                life: '背單字不能靠一天死記，每天堅持背五個，水滴石穿，一年就能積累上千個詞彙！'
+            },
+            {
+                id: 27,
+                titleHtml: '<ruby>負<rt>ㄈㄨˋ</rt></ruby><ruby>荊<rt>ㄐㄧㄥ</rt></ruby><ruby>請<rt>ㄑㄧㄥˇ</rt></ruby><ruby>罪<rt>ㄗㄨㄟˋ</rt></ruby>',
+                plainTitle: '負荊請罪',
+                meaning: '背著荊條向對方請罪。表示真誠地承認錯誤並請求懲罰。',
+                source: '《史記·廉頗藺相如列傳》',
+                history: '趙國大將廉頗不服氣大臣藺相如官位比自己高，多次想刁難他。藺相如為了國家利益選擇退讓。廉頗得知藺相如「先國家之急而後私仇」的胸懷後非常羞愧，赤裸上身背著刺人的荊條到藺相如家門前請罪，兩人結為生死之交。',
+                sentence: '我知道是我誤會了你，今天特地來向你負荊請罪，希望你能原諒我。',
+                life: '不小心打破了爸爸珍藏的茶壺，小明主動拿著壞茶壺去找爸爸負荊請罪並道歉。'
+            },
+            {
+                id: 28,
+                titleHtml: '<ruby>愚<rt>ㄩˊ</rt></ruby><ruby>公<rt>ㄍㄨㄥ</rt></ruby><ruby>移<rt>ㄧˊ</rt></ruby><ruby>山<rt>ㄕㄢ</rt></ruby>',
+                plainTitle: '愚公移山',
+                meaning: '比喻做事有堅定的毅力和恆心，不畏艱難，堅持到底。',
+                source: '《列子·湯問》',
+                history: '古代有一位九十多歲的老人叫愚公，苦於門前有太行、王屋兩座大山阻擋去路，決定率領全家挖山填海。智搜笑他太傻，愚公說：「我死了有兒子，兒子生孫子，子子孫孫沒有盡頭，而山不會增高，還怕挖不平嗎？」天帝被他的真誠打動，派神仙移走了大山。',
+                sentence: '面對這個看似不可能完成的大項目，我們要有愚公移山的精神一步步做下去。',
+                life: '要把這片荒廢的花園清理乾淨不容易，但只要拿出愚公移山的精神，我們終究能成功。'
+            },
+            {
+                id: 29,
+                titleHtml: '<ruby>如<rt>ㄖㄨˊ</rt></ruby><ruby>火<rt>ㄏㄨㄛˇ</rt></ruby><ruby>如<rt>ㄖㄨˊ</rt></ruby><ruby>荼<rt>ㄊㄨˊ</rt></ruby>',
+                plainTitle: '如火如荼',
+                meaning: '形容氣勢旺盛、氣氛熱烈或大規模地展開。',
+                source: '《國語·吳語》',
+                history: '春秋時期，吳王夫差率大軍與晉國爭霸會盟。清晨，吳軍列隊，北邊全穿白甲執白旗像茅花（荼）；中軍全穿赤甲執赤旗像火海（火）。遠遠看去，場面極其壯觀，氣勢逼人。',
+                sentence: '校園運動會正如火如荼地進行著，操場上傳來陣陣加油歡呼聲。',
+                life: '籃球決賽正如火如荼地展開，兩隊分數拉得非常近，大家屏息以待！'
+            },
+            {
+                id: 30,
+                titleHtml: '<ruby>濫<rt>ㄌㄢˋ</rt></ruby><ruby>竽<rt>ㄩˊ</rt></ruby><ruby>充<rt>ㄔㄨㄥ</rt></ruby><ruby>數<rt>ㄕㄨˋ</rt></ruby>',
+                plainTitle: '濫竽充數',
+                meaning: '比喻沒有真才實學的人混在行家裡湊數，或拿不好的東西充數。',
+                source: '《韓非子·內儲說上》',
+                history: '戰國時齊宣王喜歡聽吹竽，而且要三百人一起合奏。南郭先生根本不會吹竽，也混在樂隊裡裝模作樣領賞賜。後來齊湣王繼位，喜歡一個個單獨吹給他聽，南郭先生嚇得連夜逃跑了。',
+                sentence: '合唱團合唱時大家都要真唱，誰也別想在裡面濫竽充數。',
+                life: '大掃除分工時，小強只拿著掃把到處逛不掃地，很快就被老師發現他在濫竽充數。'
+            },
+            /* 
+             * ================= VOLUME 2: 30 BRAND NEW IDIOMS (ID 31 ~ 60) =================
+             * Carefully verified against historical references with accurate Taiwanese Zhuyin
+             */
+            {
+                id: 31,
+                titleHtml: '<ruby>班<rt>ㄅㄢ</rt></ruby><ruby>門<rt>ㄇㄣˊ</rt></ruby><ruby>弄<rt>ㄋㄨㄥˋ</rt></ruby><ruby>斧<rt>ㄈㄨˇ</rt></ruby>',
+                plainTitle: '班門弄斧',
+                meaning: '比喻在行家、高手面前賣弄本領，顯得不自量力。',
+                source: '唐·柳宗元《王氏太夫人墓誌銘》/ 明·梅之渙《題李白墓》',
+                history: '魯班是古代著名的建築工匠與木工始祖，手藝出神入化。如果有人在他家門口舞弄斧頭、炫耀自己的木工手藝，就會被大家笑話。明代詩人梅之渙在李白墓前看到許多遊客題的打油詩，也感嘆說：「采石江邊一堆土，李白之名高千古；來來往往一首詩，魯班門前弄大斧。」',
+                sentence: '你在這位國家級鋼琴大師面前賣弄彈奏技巧，簡直是班門弄斧。',
+                life: '剛學了一天魔術的小明就想去考倒魔術社長，大家都笑他是班門弄斧。'
+            },
+            {
+                id: 32,
+                titleHtml: '<ruby>望<rt>ㄨㄤˋ</rt></ruby><ruby>梅<rt>ㄇㄟˊ</rt></ruby><ruby>止<rt>ㄓˇ</rt></ruby><ruby>渴<rt>ㄎㄜˇ</rt></ruby>',
+                plainTitle: '望梅止渴',
+                meaning: '比喻利用空想來安慰自己或他人。',
+                source: '南朝宋·劉義慶《世說新語·假譎》',
+                history: '三國時期，曹操率領軍隊行軍，天氣非常炎熱，士兵們口渴得走不動路，四周又找不到水源。曹操靈機一動，登高大喊：「前面有一大片梅林，結滿了又酸又甜的梅子，可以解渴！」士兵們聽了口水直流，精神大振，終於堅持走到水源處。',
+                sentence: '如果沒有制定實際行動計畫，光坐在家裡幻想成功，只是望梅止渴。',
+                life: '肚子很餓但不能吃宵夜，小明看著電視裡的美食節目吞口水，算是望梅止渴吧！'
+            },
+            {
+                id: 33,
+                titleHtml: '<ruby>邯<rt>ㄏㄢˊ</rt></ruby><ruby>鄲<rt>ㄉㄢ</rt></ruby><ruby>學<rt>ㄒㄩㄝˊ</rt></ruby><ruby>步<rt>ㄅㄨˋ</rt></ruby>',
+                plainTitle: '邯鄲學步',
+                meaning: '比喻盲目模仿別人，不但沒學成新技巧，反而把原本的技能也丟掉了。',
+                source: '《莊子·秋水》',
+                history: '戰國時期，燕國壽陵有個少年聽說趙國首都邯鄲的人走路姿態最優美，便特地跑去邯鄲學走路。他每天模仿邯鄲人的步伐，學了幾個月沒學會，反而把自己的走路方式全忘光了，最後盤纏用盡，只能爬著回燕國。',
+                sentence: '學習要有自己的風格，千萬別像邯鄲學步一樣，最後弄巧成拙。',
+                life: '小華看大明星唱歌很酷就跟著模仿怪腔怪調，結果原本悅耳的歌聲也跑調了，真成了邯鄲學步。'
+            },
+            {
+                id: 34,
+                titleHtml: '<ruby>南<rt>ㄋㄢˊ</rt></ruby><ruby>轅<rt>ㄩㄢˊ</rt></ruby><ruby>北<rt>ㄅㄟˇ</rt></ruby><ruby>轍<rt>ㄓㄜˊ</rt></ruby>',
+                plainTitle: '南轅北轍',
+                meaning: '比喻行動的方向與所追求的目標完全相反。',
+                source: '《戰國策·魏策四》',
+                history: '魏王想攻打趙國首都邯鄲，謀臣季梁進諫說：「臣在太行山遇到一個人趕著馬車向北走，問他要去哪，他說要去南方的楚國。臣問他為何向北，他說『我的馬跑得快、盤纏多、車夫技術好』。但他越往前走，距離楚國反而越遠。」季梁以此勸魏王不要倒行逆施。',
+                sentence: '你一方面想提升成績，一方面卻整天打電動不看書，這豈不是南轅北轍？',
+                life: '小兵說要存錢買禮物，但每天放學都買零食飲料花光零用錢，目標和行動完全南轅北轍！'
+            },
+            {
+                id: 35,
+                titleHtml: '<ruby>囊<rt>ㄋㄤˊ</rt></ruby><ruby>螢<rt>ㄧㄥˊ</rt></ruby><ruby>映<rt>ㄧㄥˋ</rt></ruby><ruby>雪<rt>ㄒㄩㄝˇ</rt></ruby>',
+                plainTitle: '囊螢映雪',
+                meaning: '形容在極為艱苦的條件下，依然勤奮刻苦讀書。',
+                source: '《晉書·車胤傳》與《尚友錄》',
+                history: '晉朝車胤家境貧困，夏天買不起燈油，便抓了幾十隻螢火蟲放進白色透光的布袋（囊螢），藉著微光夜讀；同朝代的孫康冬天夜裡買不起蠟燭，就坐在雪地旁利用白雪反射的月光（映雪）苦讀。兩人最終都成為博學之士。',
+                sentence: '現代我們的學習資源豐富，應當時刻記取古人囊螢映雪的求學精神。',
+                life: '在停電的夜晚，小芳點起小手電筒繼續複習生字，颇有幾分囊螢映雪的刻苦風範。'
+            },
+            {
+                id: 36,
+                titleHtml: '<ruby>懸<rt>ㄒㄩㄢˊ</rt></ruby><ruby>樑<rt>ㄌㄧㄤˊ</rt></ruby><ruby>刺<rt>ㄘˋ</rt></ruby><ruby>股<rt>ㄍㄨˇ</rt></ruby>',
+                plainTitle: '懸樑刺股',
+                meaning: '比喻意志堅強、刻苦自勉讀書，克服一切倦怠。',
+                source: '《漢書》孫敬傳 / 《戰國策·秦策一》蘇秦',
+                history: '漢朝孫敬讀書時為防止打瞌睡，把頭髮用繩子繫在屋樑上，一低頭頭髮被扯痛就會醒來（懸樑）；戰國蘇秦讀書疲倦想睡時，便拿錐子刺自己的大腿（刺股），痛醒後繼續讀書。兩人後來都成為大學問家與政治家。',
+                sentence: '為了考上理想的高中，哥哥拿出了懸樑刺股的堅定毅力。',
+                life: '小杰在書桌旁貼上座右銘，每當想睡時就洗一把冷水臉，拿出懸樑刺股的精神堅持複習。'
+            },
+            {
+                id: 37,
+                titleHtml: '<ruby>拋<rt>ㄆㄠ</rt></ruby><ruby>磚<rt>ㄓㄨㄢ</rt></ruby><ruby>引<rt>ㄧㄣˇ</rt></ruby><ruby>玉<rt>ㄩˋ</rt></ruby>',
+                plainTitle: '拋磚引玉',
+                meaning: '謙虛地用自己粗淺的意見或作品，引出別人更精彩高明的見解。',
+                source: '宋·釋道原《景德傳燈錄》',
+                history: '唐代詩人常建聽說大詩人趙嘏要遊覽蘇州靈巖寺，便搶先在寺廟牆壁上題了半首詩。趙嘏來到後看到牆上的殘詩，隨手提筆續上了兩句，成了一首極為絕妙的七絕詩。大家都稱讚常建是用「磚頭」引出了「美玉」。',
+                sentence: '我剛才發表的看法只是一點粗淺想法，希望能起到拋磚引玉的作用。',
+                life: '討論會上班長先提了個小點子，笑著說這叫拋磚引玉，果然引發大家提出許多很棒的點子！'
+            },
+            {
+                id: 38,
+                titleHtml: '<ruby>鷸<rt>ㄩˋ</rt></ruby><ruby>蚌<rt>ㄅㄤˋ</rt></ruby><ruby>相<rt>ㄒㄧㄤ</rt></ruby><ruby>爭<rt>ㄓㄥ</rt></ruby>',
+                plainTitle: '鷸蚌相爭',
+                meaning: '比喻雙方互不相讓、爭執不下，結果兩敗俱傷，反而讓第三者坐收漁翁之利。',
+                source: '《戰國策·燕策二》',
+                history: '一隻蚌張開殼在河灘曬太陽，水鳥（鷸）跑去啄食它的肉，蚌立刻緊緊夾住鷸的嘴巴。鷸說：「今天不下雨，明天不下雨，你就會乾死！」蚌說：「今天拔不出嘴，明天拔不出嘴，你就會餓死！」雙方僵持不下，最後走來的漁夫毫不費力把兩者一起捉走了。',
+                sentence: '你們兩位同學不要為了一點小事爭吵不休，免得鷸蚌相爭，最後得不償失。',
+                life: '兩隻小小兵為了爭奪一根香蕉互不相讓，結果香蕉滾下斜坡被小狗叼走了，真是鷸蚌相爭！'
+            },
+            {
+                id: 39,
+                titleHtml: '<ruby>投<rt>ㄊㄡˊ</rt></ruby><ruby>筆<rt>ㄅㄧˇ</rt></ruby><ruby>從<rt>ㄘㄨㄥˊ</rt></ruby><ruby>戎<rt>ㄖㄨㄥˊ</rt></ruby>',
+                plainTitle: '投筆從戎',
+                meaning: '比喻放棄文職工作，參加軍隊立志保衛國家立功。',
+                source: '《後漢書·班超傳》',
+                history: '東漢青年班超家境不好，靠替官府抄寫文書維持生計。有一天他扔掉毛筆嘆息說：「大丈夫應當像傅介子、張騫那樣在邊境立功報效國家，怎能整天守在筆硯之間抄書呢！」後來他毅然參軍出使西域，平定各邦，被封為定遠侯。',
+                sentence: '抗戰時期，許多熱血青年紛紛投筆從戎，展現了高尚的愛國情操。',
+                life: '聽了邊境軍人守護國土的故事，小明立下志向，長大後也要投筆從戎當個保家衛國的軍人！'
+            },
+            {
+                id: 40,
+                titleHtml: '<ruby>撲<rt>ㄆㄨ</rt></ruby><ruby>朔<rt>ㄕㄨㄛˋ</rt></ruby><ruby>迷<rt>ㄇㄧˊ</rt></ruby><ruby>離<rt>ㄌㄧˊ</rt></ruby>',
+                plainTitle: '撲朔迷離',
+                meaning: '形容事情錯綜複雜，真相難以分辨清楚。',
+                source: '北朝民歌《木蘭詩》',
+                history: '木蘭女扮男裝代父從軍十二年，回鄉換回女裝後，軍中夥伴都大吃一驚。詩中寫道：「雄兔腳撲朔，雌兔眼迷離；雙兔傍地走，安能辨我是雄雌？」意思是把兔子抓起來時公兔腳會亂蹬（撲朔），母兔眼睛瞇著（迷離），但一起在地上跑時很難分辨。',
+                sentence: '這宗遺失案件的線索撲朔迷離，讓警察叔叔花費了好一番功夫才查清真相。',
+                life: '這部柯南偵探動畫的情節撲朔迷離，直到最後一刻才揭曉犯人是誰！'
+            },
+            {
+                id: 41,
+                titleHtml: '<ruby>熟<rt>ㄕㄡˊ</rt></ruby><ruby>能<rt>ㄋㄥˊ</rt></ruby><ruby>生<rt>ㄕㄥ</rt></ruby><ruby>巧<rt>ㄑㄧㄠˇ</rt></ruby>',
+                plainTitle: '熟能生巧',
+                meaning: '指做事情反覆練習多次後，自然掌握其中的巧妙竅門。',
+                source: '宋·歐陽修《歸田錄》',
+                history: '北宋神箭手陳堯咨射箭百發百中，非常自滿。一位賣油翁看見後只微微點頭。老翁把一個銅錢放在油葫蘆口上，勺了一勺油，從高處倒下去，油穿過銅錢孔注入壺中，錢幣邊緣卻一點油都沒沾上。老翁笑著說：「我也沒別的技巧，只不過熟能生巧罷了。」',
+                sentence: '剛開始打字速度慢不要氣餒，只要每天多練習，熟能生巧就會越打越快。',
+                life: '小明剛學魔術方塊時手忙腳亂，經過兩個星期的練習，熟能生巧，三十秒就能復原六面！'
+            },
+            {
+                id: 42,
+                titleHtml: '<ruby>迎<rt>ㄧㄥˊ</rt></ruby><ruby>刃<rt>ㄖㄣˋ</rt></ruby><ruby>而<rt>ㄦˊ</rt></ruby><ruby>解<rt>ㄐㄧㄝˇ</rt></ruby>',
+                plainTitle: '迎刃而解',
+                meaning: '比喻關鍵問題解決了，其他相關問題也就順理成章容易解決。',
+                source: '《晉書·杜預傳》',
+                history: '西晉將軍杜預率軍伐吳，連戰連勝。有人建議天熱先退兵休整，杜預堅決反對說：「現在我軍士氣高昂，就像用鋒利的刀破竹子一樣，只要破開前幾節（迎刃），後面整根竹子就會順著裂開而順利劈開！」果然晉軍一鼓作氣滅掉了吳國。',
+                sentence: '只要我們釐清核心的公式原理，這道看似複雜的數學題目就能迎刃而解。',
+                life: '大家爭論不休的打掃責任分工，在班長拿出輪值表的那一刻迎刃而解！'
+            },
+            {
+                id: 43,
+                titleHtml: '<ruby>風<rt>ㄈㄥ</rt></ruby><ruby>聲<rt>ㄕㄥ</rt></ruby><ruby>鶴<rt>ㄏㄜˋ</rt></ruby><ruby>唳<rt>ㄌㄧˋ</rt></ruby>',
+                plainTitle: '風聲鶴唳',
+                meaning: '形容驚慌失措，聽到風聲或鶴鳥叫聲都疑神疑鬼，害怕遭到危險。',
+                source: '《晉書·謝玄傳》',
+                history: '前秦苻堅在淝水之戰被東晉軍隊打得大敗潰逃。秦軍在逃跑的路上驚恐萬分，聽到呼呼的風聲和天空中仙鶴的哀鳴啼叫（唳），都以為是晉國追兵趕來了，沒日沒夜狂奔，累死凍死者不計其數。',
+                sentence: '這群搶劫犯在警方的圍捕下風聲鶴唳，稍有動靜就嚇得瑟瑟發抖。',
+                life: '沒寫作業的小剛聽到走廊傳來腳步聲就風聲鶴唳，緊張得以為老師要走進來抽查了。'
+            },
+            {
+                id: 44,
+                titleHtml: '<ruby>孺<rt>ㄖㄨˊ</rt></ruby><ruby>子<rt>ㄗˇ</rt></ruby><ruby>可<rt>ㄎㄜˇ</rt></ruby><ruby>教<rt>ㄐㄧㄠˋ</rt></ruby>',
+                plainTitle: '孺子可教',
+                meaning: '稱讚年輕人有上進心，謙虛好學，值得用心栽培培育。',
+                source: '《史記·留侯世家》',
+                history: '漢初張良年輕時在下邳橋上遇到一位神秘老人（黃石公）。老人把鞋子故意扔到橋下，讓張良幫忙撿並穿上。張良恭敬地撿回並跪著為老人穿好。老人高興地讚嘆說：「孺子可教矣！」並傳授給張良《太公兵法》，張良後來成為劉邦的首席謀士。',
+                sentence: '這名新學員虛心聽取教練的批評並立刻改正，教練高興地說：「真是孺子可教！」',
+                life: '小明主動留下來向自然老師請教問題，老師稱讚他孺子可教，很有科學探究精神。'
+            },
+            {
+                id: 45,
+                titleHtml: '<ruby>東<rt>ㄉㄨㄥ</rt></ruby><ruby>施<rt>ㄕ</rt></ruby><ruby>效<rt>ㄒㄧㄠˋ</rt></ruby><ruby>顰<rt>ㄆㄧㄣˊ</rt></ruby>',
+                plainTitle: '東施效顰',
+                meaning: '比喻盲目胡亂模仿別人，結果適得其反，反而醜態百出。',
+                source: '《莊子·天運》',
+                history: '春秋時期越國美女西施心口痛，皺著眉頭（顰）手撫胸口走在街上，姿態依然美麗動人。同村一個相貌醜陋的女子東施看到後覺得很美，也學著西施捂著胸口、皺著眉頭到處走，結果富人看到關門不出，窮人看見拉著妻兒逃跑。',
+                sentence: '每個人的特質不同，穿適合自己的衣服就好，東施效顰只會徒增笑料。',
+                life: '看別人戴誇張的墨鏡很酷，小強也戴著來上課，結果連路都看不清撞到門，真是東施效顰！'
+            },
+            {
+                id: 46,
+                titleHtml: '<ruby>雞<rt>ㄐㄧ</rt></ruby><ruby>犬<rt>ㄑㄩㄢˇ</rt></ruby><ruby>升<rt>ㄕㄥ</rt></ruby><ruby>天<rt>ㄊㄧㄢ</rt></ruby>',
+                plainTitle: '雞犬升天',
+                meaning: '比喻一個人得勢或做大官，連帶他的親友甚至僕從也跟著沾光獲利（含譏諷意味）。',
+                source: '漢·王充《論衡·道虛》',
+                history: '傳說西漢淮南王劉安好道術，煉成了長生不老的仙丹。劉安吃了仙丹飛升成仙，院子裡留下的藥臼和藥渣被家裡的雞和狗舔食乾淨，結果雞和狗也跟著騰雲駕霧飛上天成了神仙。',
+                sentence: '這名經理一升職就安插自己的親戚進公司擔任要職，簡直是雞犬升天。',
+                life: '小小兵老大剛當上班長，底下的三個小夥伴也神氣活現起來，讓人想到雞犬升天這句話。'
+            },
+            {
+                id: 47,
+                titleHtml: '<ruby>唇<rt>ㄔㄨㄣˊ</rt></ruby><ruby>亡<rt>ㄨㄤˊ</rt></ruby><ruby>齒<rt>ㄔˇ</rt></ruby><ruby>寒<rt>ㄏㄢˊ</rt></ruby>',
+                plainTitle: '唇亡齒寒',
+                meaning: '比喻雙方利害休戚相關，一方受到損害，另一方也必然跟著遭殃。',
+                source: '《左傳·僖公五年》',
+                history: '晉獻公想借道虞國去攻打虢國。虞國大夫宮之奇勸阻虞公說：「虢國是虞國的屏障，虢國一旦被滅，虞國也保不住了。諺語說『嘴唇沒了牙齒就會受凍（唇亡齒寒）』，我們兩國正是這種關係！」虞公不聽勸，收了晉國禮物借道，結果晉軍滅了虢國後，回程順道把虞國也滅了。',
+                sentence: '我們班級各個小組要團結合作，因為唇亡齒寒，大家的總積分是一起計算的。',
+                life: '足球場上後衛與門將是唇亡齒寒的關係，後衛防守一旦失誤，門將就很難抵擋對手進球。'
+            },
+            {
+                id: 48,
+                titleHtml: '<ruby>洛<rt>ㄌㄨㄛˋ</rt></ruby><ruby>陽<rt>ㄧㄤˊ</rt></ruby><ruby>紙<rt>ㄓˇ</rt></ruby><ruby>貴<rt>ㄍㄨㄟˋ</rt></ruby>',
+                plainTitle: '洛陽紙貴',
+                meaning: '比喻著作或文章極受歡迎，大家競相傳抄購買，以致紙張價格上漲。',
+                source: '《晉書·左思傳》',
+                history: '西晉文學家左思花費了整整十年心血，構思寫成了描繪三國首都風貌的《三都賦》。剛完成時並不受重視，但經著名學者張華等人盛讚推薦後，洛陽的豪門貴族爭相傳抄，一時之間洛陽城的紙張供不應求，價格大漲。',
+                sentence: '這位兒童文學作家的全新童話一出版就登上暢銷榜首，引來洛陽紙貴的轟動。',
+                life: '這本精彩的小小兵漫畫一上市就被搶購一空，學校書店一書難求，真可謂洛陽紙貴！'
+            },
+            {
+                id: 49,
+                titleHtml: '<ruby>鐵<rt>ㄊㄧㄝˇ</rt></ruby><ruby>杵<rt>ㄔㄨˇ</rt></ruby><ruby>磨<rt>ㄇㄛˊ</rt></ruby><ruby>針<rt>ㄓㄣ</rt></ruby>',
+                plainTitle: '鐵杵磨針',
+                meaning: '比喻只要有恆心與耐心，再艱鉅困難的任務也能克服完成。',
+                source: '宋·祝穆《方輿勝覽·眉州》',
+                history: '傳說唐代大詩人李白小時候讀書不用功，經常逃學玩耍。一天他在溪邊看到一位老婆婆正拿著一根粗大的鐵棒在石頭上磨。李白好奇詢問，老婆婆說要把它磨成繡花針。李白驚訝地問：「鐵棒那麼粗怎麼磨得成針？」老婆婆說：「只要功夫深，鐵杵磨成針！」李白大受感動，從此發憤苦讀。',
+                sentence: '只要秉持鐵杵磨針的毅力，即使再難解的科學奧秘也能被探索出來。',
+                life: '每天堅持練習寫一張毛筆字，鐵杵磨針，半年後小杰的書法字跡煥然一新！'
+            },
+            {
+                id: 50,
+                titleHtml: '<ruby>望<rt>ㄨㄤˋ</rt></ruby><ruby>洋<rt>ㄧㄤˊ</rt></ruby><ruby>興<rt>ㄒㄧㄥ</rt></ruby><ruby>嘆<rt>ㄊㄢˋ</rt></ruby>',
+                plainTitle: '望洋興嘆',
+                meaning: '比喻看見別人偉大或事物博大精深，深感自己渺小；現多指能力不足而無可奈何。',
+                source: '《莊子·秋水》',
+                history: '秋天雨水匯集，黃河水暴漲，河神河伯自以為全天下的壯觀都在自己這裡。當他順流東下到達北海，看見眼前一片汪洋無邊無際的大海時，河伯轉動臉龐仰望大海神若，嘆息說：「要不是見到大海的廣闊，我永遠不知道自己的見識有多麼淺薄！」',
+                sentence: '走進這座世界級的龐大圖書館，看著萬千藏書，真讓人忍不住望洋興嘆。',
+                life: '面對這道奧林匹克等級的難題，平時自稱數學天才的小強也只能望洋興嘆，無從下筆。'
+            },
+            {
+                id: 51,
+                titleHtml: '<ruby>孟<rt>ㄇㄥˋ</rt></ruby><ruby>母<rt>ㄇㄨˇ</rt></ruby><ruby>三<rt>ㄙㄢ</rt></ruby><ruby>遷<rt>ㄑㄧㄢ</rt></ruby>',
+                plainTitle: '孟母三遷',
+                meaning: '比喻父母為了給孩子選擇良好的學習與成長環境而竭盡心力。',
+                source: '漢·劉向《列女傳·母儀傳》',
+                history: '孟子小時候家住在墓地附近，他便和鄰居小孩玩築墓哭喪的遊戲；孟母於是把家搬到集市旁，孟子又學起商人吆喝殺價；最後孟母把家搬到學校旁邊，孟子便跟著學生學習禮儀、誦讀詩書。孟母高興地說：「這才是孩子該住的地方！」',
+                sentence: '為了讓孩子接受優質的教育，許多家長不惜孟母三遷，搬到文教區居住。',
+                life: '爸媽為了給我們安靜的讀書環境特地裝修了隔音書房，這種用心真有孟母三遷的精神。'
+            },
+            {
+                id: 52,
+                titleHtml: '<ruby>夜<rt>ㄧㄝˋ</rt></ruby><ruby>郎<rt>ㄌㄤˊ</rt></ruby><ruby>自<rt>ㄗˋ</rt></ruby><ruby>大<rt>ㄉㄚˋ</rt></ruby>',
+                plainTitle: '夜郎自大',
+                meaning: '比喻見識狹隘卻狂妄自大，不知天高地厚。',
+                source: '《史記·西南夷列傳》',
+                history: '漢武帝時期，朝廷派遣使者前往西南少數民族地區。使者來到夜郎國，夜郎國王根本沒出過國門，自大傲慢地問漢朝使者：「漢朝跟我們夜郎國相比，哪一個更大？」其實夜郎國的疆域只是漢朝境內極小的一個縣那麼大。',
+                sentence: '我們在取得一點成績時千萬不能夜郎自大，世界上優秀的人還很多。',
+                life: '只拿了一次班級小考第一名就到处自吹自擂，這種夜郎自大的態度會惹人討厭的。'
+            },
+            {
+                id: 53,
+                titleHtml: '<ruby>請<rt>ㄑㄧㄥˇ</rt></ruby><ruby>君<rt>ㄐㄩㄣ</rt></ruby><ruby>入<rt>ㄖㄨˋ</rt></ruby><ruby>甕<rt>ㄨㄥˋ</rt></ruby>',
+                plainTitle: '請君入甕',
+                meaning: '比喻用某人整別人的手段或辦法反過來整治他本人。',
+                source: '《資治通鑑·唐紀二十》',
+                history: '唐朝武則天時期，酷吏周興被告發謀反。武則天下令另一酷吏來俊臣審理。來俊臣請周興吃飯，請教說：「囚犯若不認罪該怎麼辦？」周興得意地說：「把大甕四周生上炭火，將囚犯放進去，還有什麼不招的！」來俊臣立刻命人搬來大甕點上炭火，起身對周興說：「有人告發你謀反，請君入甕吧！」周興嚇得魂飛魄散，跪地認罪。',
+                sentence: '他本想設圈套陷害競爭對手，結果被對方巧妙識破，請君入甕，讓他自食惡果。',
+                life: '調皮的弟弟在門上放水球想惡整哥哥，結果哥哥從窗戶進來喊了一聲，弟弟自己開門中招，真是請君入甕！'
+            },
+            {
+                id: 54,
+                titleHtml: '<ruby>刮<rt>ㄍㄨㄚ</rt></ruby><ruby>目<rt>ㄇㄨˋ</rt></ruby><ruby>相<rt>ㄒㄧㄤ</rt></ruby><ruby>看<rt>ㄎㄢˋ</rt></ruby>',
+                plainTitle: '刮目相看',
+                meaning: '指去掉舊的看法，用全新的眼光重新看待進步顯著的人。',
+                source: '《三國志·吳書·呂蒙傳》裴松之注引《江表傳》',
+                history: '三國吳國大將呂蒙原本是個武夫不愛讀書，經孫權勸說後發憤勤讀。幾年後都督魯肅路過與他討論軍事戰略，驚訝於呂蒙的博學多才。呂蒙笑著說：「士別三日，即更刮目相待，大兄何見事之晚乎！」意思是讀書人分開三天，就要擦亮眼睛用新眼光來看待了。',
+                sentence: '經過一個暑假的刻苦自習，他的英語成績名列前茅，令人刮目相看。',
+                life: '平時默默無聞的小林在運動會短跑奪得冠軍，爆發力讓所有同學刮目相看！'
+            },
+            {
+                id: 55,
+                titleHtml: '<ruby>樂<rt>ㄌㄜˋ</rt></ruby><ruby>不<rt>ㄅㄨˋ</rt></ruby><ruby>思<rt>ㄙ</rt></ruby><ruby>蜀<rt>ㄕㄨˇ</rt></ruby>',
+                plainTitle: '樂不思蜀',
+                meaning: '比喻沉湎於享樂之中，留戀新環境而忘記了故鄉或本分。',
+                source: '《三國志·蜀書·後主傳》裴松之注引《漢晉春秋》',
+                history: '蜀漢滅亡後，後主劉禪被安置在魏國都城洛陽。司馬昭宴請劉禪，特意安排演奏蜀地音樂、跳蜀地舞蹈。蜀國舊臣皆黯然神傷，唯獨劉禪喜笑顏開。司馬昭問他：「你想念蜀國嗎？」劉禪回答：「此間樂，不思蜀。」司馬昭感嘆劉禪毫無心肝骨氣。',
+                sentence: '放假去遊樂園玩雖然開心，但可不能樂不思蜀，連開學作業都忘光光喔！',
+                life: '在海灘度假勝地玩了一週，小兵樂不思蜀，直嚷著不想收拾書包回學校上課。'
+            },
+            {
+                id: 56,
+                titleHtml: '<ruby>狡<rt>ㄐㄧㄠˇ</rt></ruby><ruby>兔<rt>ㄊㄨˋ</rt></ruby><ruby>三<rt>ㄙㄢ</rt></ruby><ruby>窟<rt>ㄎㄨ</rt></ruby>',
+                plainTitle: '狡兔三窟',
+                meaning: '比喻準備多處藏身隱蔽之所或多套備用計畫，以防不測、確保安全。',
+                source: '《戰國策·齊策四》',
+                history: '齊國孟嘗君的門客馮諼對他說：「狡猾的兔子要有三個洞穴（三窟），才能免除死亡的威脅。現在您只有一個薛地，還不能高枕無憂。」於是馮諼先替他在薛地免除百姓債務收買民心，又出使魏國提高孟嘗君身價，最後讓齊王在薛地建立宗廟，確保孟嘗君政治地位數十年安然無恙。',
+                sentence: '重要電腦文件必須在雲端與隨身碟都備份，學學狡兔三窟的避險哲學。',
+                life: '出門旅行時，媽媽把備用零錢分別放在三個背包夾層裡，笑著說這叫狡兔三窟不怕丟！'
+            },
+            {
+                id: 57,
+                titleHtml: '<ruby>臨<rt>ㄌㄧㄣˊ</rt></ruby><ruby>渴<rt>ㄎㄜˇ</rt></ruby><ruby>掘<rt>ㄐㄩㄝˊ</rt></ruby><ruby>井<rt>ㄐㄧㄥˇ</rt></ruby>',
+                plainTitle: '臨渴掘井',
+                meaning: '比喻平時不早做準備，事到臨頭才慌慌張張想辦法應付。',
+                source: '《晏子春秋·內篇雜上》/《黃帝內經·素問》',
+                history: '春秋齊景公問晏子如何治理國家。晏子回答說：「溺水後才去造船，口渴了才去挖井（臨渴掘井），就算挖得再快也救不了渴；平日不做好國防與儲糧，危急時才招兵買馬，哪裡還來得及！」告誡治國必須未雨綢繆。',
+                sentence: '考前一晚才熬夜通宵抱佛腳，臨渴掘井通常收不到好效果。',
+                life: '明天就要交手作勞作了，小華今晚才在翻箱倒櫃找材料，真是臨渴掘井！'
+            },
+            {
+                id: 58,
+                titleHtml: '<ruby>按<rt>ㄢˋ</rt></ruby><ruby>圖<rt>ㄊㄨˊ</rt></ruby><ruby>索<rt>ㄙㄨㄛˇ</rt></ruby><ruby>驥<rt>ㄐㄧˋ</rt></ruby>',
+                plainTitle: '按圖索驥',
+                meaning: '比喻按照死規矩或現成圖書線索辦事，不知靈活變通；也指按照線索尋找目標。',
+                source: '《漢書·梅福傳》引《相馬經》',
+                history: '春秋秦國孫陽（伯樂）擅長相馬，著有《相馬經》配有圖畫。他的兒子拿著這本書四處找千里馬（驥）。他看到一隻大蟾蜍（癩蛤蟆），額頭凸起、腳掌形狀很符合書中描述，便抓回家對父親說：「我找到一匹好馬，只是這匹馬太喜歡跳躍了！」伯樂哭笑不得。',
+                sentence: '學習知識要融會貫通，死記硬背、按圖索驥是無法靈活解決複雜問題的。',
+                life: '組裝積木如果只懂得按圖索驥，就享受不到自己天馬行空發揮創意的樂趣了。'
+            },
+            {
+                id: 59,
+                titleHtml: '<ruby>雞<rt>ㄐㄧ</rt></ruby><ruby>鳴<rt>ㄇㄧㄥˊ</rt></ruby><ruby>狗<rt>ㄍㄡˇ</rt></ruby><ruby>盜<rt>ㄉㄠˋ</rt></ruby>',
+                plainTitle: '雞鳴狗盜',
+                meaning: '比喻微不足道的技能或卑劣不正當的伎倆；也指具有某種特殊小技能的人。',
+                source: '《史記·孟嘗君列傳》',
+                history: '戰國齊國孟嘗君被秦昭王扣留。門客中有一位擅長裝狗鑽洞（狗盜），潛入秦宮偷回之前送給秦王的白狐皮裘，賄賂秦王愛妃換取放行文書；逃到函谷關時正值半夜城門緊閉，另一位擅長學公雞啼叫（雞鳴）的門客喔喔啼叫，引得群雞共鳴，守門人以為天亮開了城門，孟嘗君一行人順利逃脫。',
+                sentence: '做人要光明正大憑真本事立足，千萬不可搞那些雞鳴狗盜的小動作。',
+                life: '他以為偷看別人的筆記能拿到好成績，這種雞鳴狗盜的作弊小把戲很快被老師識破了。'
+            },
+            {
+                id: 60,
+                titleHtml: '<ruby>毛<rt>ㄇㄠˊ</rt></ruby><ruby>遂<rt>ㄙㄨㄟˋ</rt></ruby><ruby>自<rt>ㄗˋ</rt></ruby><ruby>薦<rt>ㄐㄧㄢˋ</rt></ruby>',
+                plainTitle: '毛遂自薦',
+                meaning: '比喻主動自我推薦承擔重任，展現自信與勇氣。',
+                source: '《史記·平原君虞卿列傳》',
+                history: '秦軍圍攻趙國都城邯鄲，平原君準備挑選二十名文武兼備的門客出使楚國求救，只挑出十九人。門客毛遂主動站出來推薦自己（自薦）。平原君問：「賢士在世如同錐子放在布袋裡，鋒芒立刻會顯露出來，你在我這裡三年我都沒聽過你。」毛遂自信地說：「如果早把我放在布袋裡，我連整個錐尖都會脫穎而出！」後來在楚國朝堂上，果然憑藉毛遂的勇氣與雄辯促成楚趙結盟解圍。',
+                sentence: '在競選班級模範生時，他大方地毛遂自薦，贏得了全班熱烈的掌聲。',
+                life: '運動會大隊接力缺少最後一棒，小明毛遂自薦自告奮勇上場，奮力奪下了金牌！'
+            },
+            /* 
+             * ================= VOLUME 3: 30 BRAND NEW IDIOMS (ID 61 ~ 90) =================
+             * Carefully verified against historical references with accurate Taiwanese Zhuyin
+             */
+            {
+                id: 61,
+                titleHtml: '<ruby>朝<rt>ㄓㄠ</rt></ruby><ruby>三<rt>ㄙㄢ</rt></ruby><ruby>暮<rt>ㄇㄨˋ</rt></ruby><ruby>四<rt>ㄙˋ</rt></ruby>',
+                plainTitle: '朝三暮四',
+                meaning: '原指只變更名目而不改實質；後多用來比喻心意不定，反覆無常。',
+                source: '《莊子·齊物論》',
+                history: '宋國有一個養猴子的人，因為糧食不夠，跟猴子們商量說：「每天給你們橡樹果實，早上三個，晚上四個，好嗎？」猴子們聽了都非常生氣。養猴人靈機一動，改口說：「那這樣吧，早上給你們四個，晚上三個，總可以了吧？」猴子們以為早上變多了，全都高興地答應了。',
+                sentence: '他做事總是朝三暮四，一會兒想學鋼琴，一會兒又想學畫畫，結果什麼都沒學好。',
+                life: '小傑買冰淇淋時朝三暮四，一下選草莓一下換巧克力，讓後面的小小兵排隊排到打瞌睡啦！'
+            },
+            {
+                id: 62,
+                titleHtml: '<ruby>精<rt>ㄐㄧㄥ</rt></ruby><ruby>衛<rt>ㄨㄟˋ</rt></ruby><ruby>填<rt>ㄊㄧㄢˊ</rt></ruby><ruby>海<rt>ㄏㄞˇ</rt></ruby>',
+                plainTitle: '精衛填海',
+                meaning: '比喻意志堅定，不畏艱難，努力不懈地去達成既定目標。',
+                source: '《山海經·北山經》',
+                history: '傳說炎帝的小女兒女娃在東海遊玩時不幸溺水而死。她的靈魂化作一隻名為「精衛」的小鳥。為了不讓大海再奪走其他人的生命，精衛鳥每天不斷地從西山銜來樹枝和石塊，投入東海之中，發誓要把這片浩瀚的大海填平。',
+                sentence: '面對這項艱鉅的研究計畫，科學家們抱著精衛填海的精神，日夜努力不懈。',
+                life: '要把這本厚厚的字典背完很難，但只要有精衛填海的毅力，每天記十頁，終能完成！'
+            },
+            {
+                id: 63,
+                titleHtml: '<ruby>夸<rt>ㄎㄨㄚ</rt></ruby><ruby>父<rt>ㄈㄨˋ</rt></ruby><ruby>追<rt>ㄓㄨㄟ</rt></ruby><ruby>日<rt>ㄖˋ</rt></ruby>',
+                plainTitle: '夸父追日',
+                meaning: '比喻有宏大的志向，或比喻不自量力。',
+                source: '《山海經·海外北經》',
+                history: '古代神話中有一個名叫夸父的巨人，他立志要追上太陽。他一直追到了太陽落下的地方，渴得喝乾了黃河和渭水的水，還不夠解渴，準備向北去喝大澤的水。結果在半路上渴死了，他丟下的手杖化作了一片桃林。',
+                sentence: '只要認清自己的能力並穩紮穩打，就不會淪為夸父追日般的不切實際。',
+                life: '一天內要寫完三十張考卷根本是夸父追日，還是做好時間規劃每天寫幾張比較實際。'
+            },
+            {
+                id: 64,
+                titleHtml: '<ruby>畫<rt>ㄏㄨㄚˋ</rt></ruby><ruby>餅<rt>ㄅㄧㄥˇ</rt></ruby><ruby>充<rt>ㄔㄨㄥ</rt></ruby><ruby>飢<rt>ㄐㄧ</rt></ruby>',
+                plainTitle: '畫餅充飢',
+                meaning: '比喻用空想來安慰自己，不能解決實際問題。',
+                source: '《三國志·魏書·盧毓傳》',
+                history: '三國時魏明帝要選拔人才，他對大臣盧毓說：「選舉人才不能只看名聲，名聲就像在地上畫的餅一樣，只能看，卻不能用來充飢解餓。」要求選拔必須看重真才實學。',
+                sentence: '如果我們不採取實際行動，這些美好的計畫終究只是畫餅充飢。',
+                life: '肚子餓的時候看美食雜誌上的大漢堡，根本是畫餅充飢，只會越看越餓啦！'
+            },
+            {
+                id: 65,
+                titleHtml: '<ruby>走<rt>ㄗㄡˇ</rt></ruby><ruby>馬<rt>ㄇㄚˇ</rt></ruby><ruby>看<rt>ㄎㄢˋ</rt></ruby><ruby>花<rt>ㄏㄨㄚ</rt></ruby>',
+                plainTitle: '走馬看花',
+                meaning: '騎在奔跑的馬上看花。比喻匆忙、粗略地觀察事物，沒有深入了解。',
+                source: '唐·孟郊《登科後》',
+                history: '唐代詩人孟郊年輕時屢次落榜，直到四十六歲才考中進士。他非常高興，寫下了一首詩表達喜悅：「春風得意馬蹄疾，一日看盡長安花。」形容他騎著馬在春風中得意奔馳，匆匆看遍長安城的美景。',
+                sentence: '這次參觀博物館時間太短，我們只能走馬看花，沒能仔細欣賞每件文物。',
+                life: '複習功課不能走馬看花隨便翻翻，要仔細閱讀每一行文字才能考高分喔！'
+            },
+            {
+                id: 66,
+                titleHtml: '<ruby>破<rt>ㄆㄛˋ</rt></ruby><ruby>鏡<rt>ㄐㄧㄥˋ</rt></ruby><ruby>重<rt>ㄔㄨㄥˊ</rt></ruby><ruby>圓<rt>ㄩㄢˊ</rt></ruby>',
+                plainTitle: '破鏡重圓',
+                meaning: '比喻夫妻失散或決裂後重新團聚與和好。',
+                source: '唐·孟棨《本事詩》',
+                history: '南朝陳將亡時，駙馬徐德言預料會與妻子樂昌公主失散。他把一面銅鏡破成兩半，兩人各執一半，約定正月十五在京城市場販賣破鏡作為相認憑證。後來公主被賞賜給越國公，越國公得知此事後大受感動，便讓兩人破鏡重圓，重新團聚。',
+                sentence: '經過多年的誤會與分離，這對好朋友終於冰釋前嫌、破鏡重圓。',
+                life: '小兵弄斷了心愛的香蕉玩具，爸爸用強力膠幫他黏好，笑著說這也算破鏡重圓啦！'
+            },
+            {
+                id: 67,
+                titleHtml: '<ruby>游<rt>ㄧㄡˊ</rt></ruby><ruby>刃<rt>ㄖㄣˋ</rt></ruby><ruby>有<rt>ㄧㄡˇ</rt></ruby><ruby>餘<rt>ㄩˊ</rt></ruby>',
+                plainTitle: '游刃有餘',
+                meaning: '比喻做事熟練，解決問題輕鬆毫不費力。',
+                source: '《莊子·養生主》',
+                history: '廚師庖丁為文惠君宰牛。他動作優美，刀聲合乎音律。文惠君問他技術為何如此高超。庖丁說：「我宰牛十九年，對牛的身體結構瞭如指掌。牛骨節間有空隙，而刀刃很薄，用薄刀刃插入空隙中，寬寬敞敞的，刀刃運作起來自然『游刃有餘』。」',
+                sentence: '這道數學題對班長來說簡直是小菜一碟，解答起來游刃有餘。',
+                life: '每天幫媽媽洗碗的小美，現在整理廚房的動作已經游刃有餘了！'
+            },
+            {
+                id: 68,
+                titleHtml: '<ruby>奇<rt>ㄑㄧˊ</rt></ruby><ruby>貨<rt>ㄏㄨㄛˋ</rt></ruby><ruby>可<rt>ㄎㄜˇ</rt></ruby><ruby>居<rt>ㄐㄩ</rt></ruby>',
+                plainTitle: '奇貨可居',
+                meaning: '把稀有珍貴的物品囤積起來，等到價格高漲時才賣出；也比喻挾持某種獨特的技能或人事物以謀求功名利祿。',
+                source: '《史記·呂不韋列傳》',
+                history: '戰國時期大商人呂不韋在趙國遇見作為人質的秦國公子異人。呂不韋認為異人雖然落魄，但有皇室血統，就像一件難得的奇異貨品，可以囤積起來（奇貨可居）。於是呂不韋花重金幫助異人回秦國即位為秦莊襄王，自己也因此當上了秦國丞相。',
+                sentence: '這種絕版的古董玩具在市場上已經奇貨可居，價格被炒得非常高。',
+                life: '哥哥把最後一包限量版洋芋片藏在櫃子裡，打算奇貨可居，等弟弟求他才拿出來。'
+            },
+            {
+                id: 69,
+                titleHtml: '<ruby>退<rt>ㄊㄨㄟˋ</rt></ruby><ruby>避<rt>ㄅㄧˋ</rt></ruby><ruby>三<rt>ㄙㄢ</rt></ruby><ruby>舍<rt>ㄕㄜˋ</rt></ruby>',
+                plainTitle: '退避三舍',
+                meaning: '軍隊退讓九十里（一舍為三十里）。比喻遇到衝突時主動退讓，不與人爭執。',
+                source: '《左傳·僖公二十二年》',
+                history: '春秋時，晉國公子重耳流亡到楚國，楚成王熱情款待他，並問：「你將來若回國當上國君，如何報答我？」重耳答：「若兩國不幸交戰，我一定讓晉軍先向後退避三舍（九十里），以報答今日之恩。」後來重耳回國即位（晉文公），在城濮之戰中果然兌現諾言先退軍，最終大敗楚軍。',
+                sentence: '面對對方不理性的挑釁，他選擇退避三舍，展現了極高的修養。',
+                life: '看到弟弟生氣地亂揮拳頭，小明立刻退避三舍，決定等他冷靜再來溝通。'
+            },
+            {
+                id: 70,
+                titleHtml: '<ruby>一<rt>ㄧˋ</rt></ruby><ruby>鳴<rt>ㄇㄧㄥˊ</rt></ruby><ruby>驚<rt>ㄐㄧㄥ</rt></ruby><ruby>人<rt>ㄖㄣˊ</rt></ruby>',
+                plainTitle: '一鳴驚人',
+                meaning: '比喻平時默默無聞，一旦展現才華，便做出驚人的成績。',
+                source: '《史記·滑稽列傳》',
+                history: '戰國時齊威王即位三年，整天沉迷享樂不理朝政。大臣淳于髡用隱語勸諫他說：「國中有隻大鳥，三年不飛也不叫，這是什麼鳥？」齊威王明白他在諷刺自己，便回答：「這隻鳥不飛則已，一飛沖天；不鳴則已，一鳴驚人！」從此齊威王發憤圖強，使齊國大治。',
+                sentence: '平常安靜的小美，在這次歌唱比賽中展現了天籟之音，真是一鳴驚人。',
+                life: '平時不擅長運動的書呆子小強，在運動會上居然拿了跳遠冠軍，一鳴驚人！'
+            },
+            {
+                id: 71,
+                titleHtml: '<ruby>紙<rt>ㄓˇ</rt></ruby><ruby>上<rt>ㄕㄤˋ</rt></ruby><ruby>談<rt>ㄊㄢˊ</rt></ruby><ruby>兵<rt>ㄅㄧㄥ</rt></ruby>',
+                plainTitle: '紙上談兵',
+                meaning: '比喻空談理論，不能解決實際問題。',
+                source: '《史記·廉頗藺相如列傳》',
+                history: '戰國時趙國名將趙奢的兒子趙括，從小熟讀兵法，談起用兵之道連父親都辯不過他。但趙奢認為兒子只懂理論不懂實戰。後來趙王中計，派趙括代替老將廉頗指揮長平之戰。趙括死搬兵書上的陣法，結果被秦軍大敗，四十萬趙軍全軍覆沒。',
+                sentence: '我們的專題報告不能只是紙上談兵，必須實際動手做實驗來驗證。',
+                life: '說要收拾房間說了一整天都沒動手，媽媽笑小兵這根本是紙上談兵！'
+            },
+            {
+                id: 72,
+                titleHtml: '<ruby>驚<rt>ㄐㄧㄥ</rt></ruby><ruby>弓<rt>ㄍㄨㄥ</rt></ruby><ruby>之<rt>ㄓ</rt></ruby><ruby>鳥<rt>ㄋㄧㄠˇ</rt></ruby>',
+                plainTitle: '驚弓之鳥',
+                meaning: '比喻曾受過驚嚇或打擊，遇到類似情況就非常惶恐害怕的人。',
+                source: '《戰國策·楚策四》',
+                history: '戰國時魏國神射手更羸和魏王看見一隻飛得很慢、叫聲悲涼的大雁。更羸說：「我不用箭，只要拉弓發出聲音就能讓它掉下來。」他拉響空弓，大雁聽到弦聲，嚇得往高處飛，結果舊傷裂開掉落地面。更羸解釋說，這隻鳥受過箭傷，心裡有陰影，聽到弓弦聲就害怕。',
+                sentence: '自從上次騎腳踏車摔傷後，他現在一看到腳踏車就像驚弓之鳥一樣不敢靠近。',
+                life: '上週被突然跳出來的小狗嚇到，現在小美看到草叢晃動就如驚弓之鳥般躲開。'
+            },
+            {
+                id: 73,
+                titleHtml: '<ruby>畫<rt>ㄏㄨㄚˋ</rt></ruby><ruby>虎<rt>ㄏㄨˇ</rt></ruby><ruby>類<rt>ㄌㄟˋ</rt></ruby><ruby>犬<rt>ㄑㄩㄢˇ</rt></ruby>',
+                plainTitle: '畫虎類犬',
+                meaning: '畫老虎畫得不好，反而像一隻狗。比喻模仿不到家，弄得不倫不類。',
+                source: '《後漢書·馬援傳》',
+                history: '東漢名將馬援在給侄子的信中，勸他們要學習穩重老實的敦厚之人，因為這類人就算學不好，至少也是個謹慎的人，就像「刻鵠不成尚類鶩（刻天鵝不成還像隻鴨子）」；不要去學那些輕狂豪放的人，學不好就會身敗名裂，如同「畫虎不成反類狗」。',
+                sentence: '這部改編的電影完全失去了原著的精神，簡直是畫虎類犬。',
+                life: '小兵想學超級英雄擺出帥氣姿勢，結果東倒西歪，真是畫虎類犬惹得大家哈哈大笑！'
+            },
+            {
+                id: 74,
+                titleHtml: '<ruby>對<rt>ㄉㄨㄟˋ</rt></ruby><ruby>牛<rt>ㄋㄧㄡˊ</rt></ruby><ruby>彈<rt>ㄊㄢˊ</rt></ruby><ruby>琴<rt>ㄑㄧㄣˊ</rt></ruby>',
+                plainTitle: '對牛彈琴',
+                meaning: '比喻對不懂道理的人講道理，或講話不看對象。',
+                source: '漢·牟融《理惑論》',
+                history: '戰國時期有一位名叫公明儀的音樂家。有一天他在郊外看到一頭牛在吃草，便興致勃勃地為牛彈奏高雅的《清角》之音。牛雖然聽得見，卻毫不理會，繼續低頭吃草。公明儀後來改彈蚊蟲的嗡嗡聲和小牛的叫聲，牛這才豎起耳朵聽了起來。',
+                sentence: '你跟他講這些深奧的藝術理論，簡直是對牛彈琴，他根本聽不懂。',
+                life: '跟不懂棒球規則的奶奶解釋全壘打的戰術，小剛覺得自己好像在對牛彈琴。'
+            },
+            {
+                id: 75,
+                titleHtml: '<ruby>竭<rt>ㄐㄧㄝˊ</rt></ruby><ruby>澤<rt>ㄗㄜˊ</rt></ruby><ruby>而<rt>ㄦˊ</rt></ruby><ruby>漁<rt>ㄩˊ</rt></ruby>',
+                plainTitle: '竭澤而漁',
+                meaning: '抽乾池水來捕魚。比喻只圖眼前利益，不顧長遠發展。',
+                source: '《呂氏春秋·義賞》',
+                history: '晉文公問大臣舅犯如何打敗楚軍，舅犯建議用欺詐的辦法。晉文公又問雍季，雍季說：「把池水抽乾來捕魚（竭澤而漁），當然能捕到很多魚，但明年就沒魚了；把樹林燒光來打獵，明年就沒野獸了。欺詐的辦法只能用一次，不是長遠之計。」',
+                sentence: '為了開發經濟而破壞生態環境，這種竭澤而漁的做法將給後代帶來災難。',
+                life: '為了買玩具把撲滿裡的錢一次全部花光光，這就是竭澤而漁，下次想買文具就沒錢囉！'
+            },
+            {
+                id: 76,
+                titleHtml: '<ruby>一<rt>ㄧˊ</rt></ruby><ruby>字<rt>ㄗˋ</rt></ruby><ruby>千<rt>ㄑㄧㄢ</rt></ruby><ruby>金<rt>ㄐㄧㄣ</rt></ruby>',
+                plainTitle: '一字千金',
+                meaning: '稱讚詩文寫得極好，每一個字都有極高的價值；或指書法作品珍貴。',
+                source: '《史記·呂不韋列傳》',
+                history: '戰國時期，秦國丞相呂不韋召集門客編寫了一部百科全書式的巨著《呂氏春秋》。書寫成後，呂不韋把它公佈在首都咸陽的城門上，並懸掛了一千金，宣告天下：如果有誰能增加或刪減書中的一個字，就賞賜給他一千金。結果沒有人能改動。',
+                sentence: '這篇得獎文章用詞精鍊、意境深遠，真可謂是一字千金。',
+                life: '校長親筆寫在畢業紀念冊上的祝福語，對小華來說簡直是一字千金，非常珍貴。'
+            },
+            {
+                id: 77,
+                titleHtml: '<ruby>緣<rt>ㄩㄢˊ</rt></ruby><ruby>木<rt>ㄇㄨˋ</rt></ruby><ruby>求<rt>ㄑㄧㄡˊ</rt></ruby><ruby>魚<rt>ㄩˊ</rt></ruby>',
+                plainTitle: '緣木求魚',
+                meaning: '爬到樹上去找魚。比喻方向、方法錯誤，不可能達到目的。',
+                source: '《孟子·梁惠王上》',
+                history: '戰國時齊宣王想用武力征服天下。孟子對他說：「以您這種做法去追求稱霸天下的目標，就好比爬到樹上去抓魚一樣（緣木求魚）。」齊宣王問：「有這麼嚴重嗎？」孟子說：「爬樹抓魚頂多抓不到，不會有災禍；但用武力強求霸業，必定帶來災難。」',
+                sentence: '不讀書只想靠作弊拿高分，無異於緣木求魚，最終一定會被發現。',
+                life: '想在文具店裡買到新鮮的蘋果，這完全是緣木求魚，找錯地方啦！'
+            },
+            {
+                id: 78,
+                titleHtml: '<ruby>名<rt>ㄇㄧㄥˊ</rt></ruby><ruby>落<rt>ㄌㄨㄛˋ</rt></ruby><ruby>孫<rt>ㄙㄨㄣ</rt></ruby><ruby>山<rt>ㄕㄢ</rt></ruby>',
+                plainTitle: '名落孫山',
+                meaning: '名字落在榜末孫山的後面。比喻考試落榜，沒有考中。',
+                source: '宋·范公偁《過庭錄》',
+                history: '宋朝有個叫孫山的人，以風趣幽默著稱。他與同鄉一起去參加鄉試，結果孫山考中了榜單的最後一名，而同鄉落榜了。孫山回到家鄉，同鄉的父親問兒子考得如何，孫山不好意思直說，便作詩回答：「解名盡處是孫山，賢郎更在孫山外。」',
+                sentence: '雖然這次鋼琴檢定名落孫山，但他並沒有氣餒，反而更加努力練習。',
+                life: '這次單字測驗小杰很可惜地名落孫山沒拿到及格證書，但他決定下週再挑戰一次！'
+            },
+            {
+                id: 79,
+                titleHtml: '<ruby>覆<rt>ㄈㄨˋ</rt></ruby><ruby>水<rt>ㄕㄨㄟˇ</rt></ruby><ruby>難<rt>ㄋㄢˊ</rt></ruby><ruby>收<rt>ㄕㄡ</rt></ruby>',
+                plainTitle: '覆水難收',
+                meaning: '倒在地上的水難以收回。比喻事情已成定局，無法挽回。',
+                source: '宋·王楙《野客叢書》/ 漢·朱買臣故事',
+                history: '漢朝名臣朱買臣年輕時家境貧寒，靠砍柴為生但熱愛讀書。他的妻子崔氏受不了貧窮，逼他休妻改嫁。後來朱買臣做官發達了，衣錦還鄉。崔氏要求復合，朱買臣讓人把一盆水潑在馬前地上，說：「如果你能把這盆水收回盆裡，我就答應你復合。」',
+                sentence: '話一旦說出口就覆水難收，因此我們講話前一定要三思。',
+                life: '不小心把墨水打翻在畫紙上已經覆水難收，小兵只好重新畫一張新的畫了。'
+            },
+            {
+                id: 80,
+                titleHtml: '<ruby>一<rt>ㄧˋ</rt></ruby><ruby>鼓<rt>ㄍㄨˇ</rt></ruby><ruby>作<rt>ㄗㄨㄛˋ</rt></ruby><ruby>氣<rt>ㄑㄧˋ</rt></ruby>',
+                plainTitle: '一鼓作氣',
+                meaning: '比喻趁著剛開始士氣最旺盛、精力最充沛的時候，一口氣把工作做完。',
+                source: '《左傳·莊公十年》',
+                history: '春秋長勺之戰，齊國進攻魯國。齊軍第一次擂鼓進軍時，魯國謀士曹劌不讓反擊；第二次齊軍擂鼓，魯軍仍不動；第三次齊軍擂鼓時，曹劌才下令反擊，大敗齊軍。曹劌說：「打仗靠的是士氣，第一次擊鼓士氣最高（一鼓作氣），第二次衰退，第三次就枯竭了。」',
+                sentence: '趁著現在大家精神好，我們一鼓作氣把大掃除完成吧！',
+                life: '週末作業很多，小明決定早上吃飽飯後一鼓作氣把數學和國語全部寫完！'
+            },
+            {
+                id: 81,
+                titleHtml: '<ruby>圖<rt>ㄊㄨˊ</rt></ruby><ruby>窮<rt>ㄑㄩㄥˊ</rt></ruby><ruby>匕<rt>ㄅㄧˇ</rt></ruby><ruby>見<rt>ㄒㄧㄢˋ</rt></ruby>',
+                plainTitle: '圖窮匕見',
+                meaning: '地圖展到盡頭，藏在裡面的匕首就露出來了。比喻事情發展到最後，真實面目或意圖終於暴露出來。',
+                source: '《戰國策·燕策三》',
+                history: '戰國末年，燕太子丹派荊軻去刺殺秦王。荊軻帶著燕國督亢地區的地圖作為禮物獻給秦王。秦王高興地展開地圖看，當地圖完全展開到盡頭時，藏在裡面的淬毒匕首露了出來。荊軻立刻抓起匕首刺向秦王，可惜最終失敗。',
+                sentence: '這個詐騙集團一開始偽裝成好心人，直到要求匯款時才圖窮匕見。',
+                life: '弟弟說要幫忙按摩背部，按了兩下就開口借遊戲機，真是圖窮匕見啊！'
+            },
+            {
+                id: 82,
+                titleHtml: '<ruby>望<rt>ㄨㄤˋ</rt></ruby><ruby>塵<rt>ㄔㄣˊ</rt></ruby><ruby>莫<rt>ㄇㄛˋ</rt></ruby><ruby>及<rt>ㄐㄧˊ</rt></ruby>',
+                plainTitle: '望塵莫及',
+                meaning: '望著別人揚起的塵土卻趕不上。比喻遠遠落後，無法相比。',
+                source: '《莊子·田子方》',
+                history: '莊子的學生顏淵對老師說：「老師您走步時我也跟著走步，您快跑我也快跑。可是當您展現出大道時，我只能在後面看著您揚起的灰塵，怎麼趕也趕不上（望塵莫及）。」表示對老師境界高遠的由衷敬佩。',
+                sentence: '他在程式設計領域的天賦和努力，讓我們這些同學望塵莫及。',
+                life: '短跑健將小飛跑得像風一樣快，其他同學只能在後面望塵莫及地喘氣。'
+            },
+            {
+                id: 83,
+                titleHtml: '<ruby>兔<rt>ㄊㄨˋ</rt></ruby><ruby>死<rt>ㄙˇ</rt></ruby><ruby>狐<rt>ㄏㄨˊ</rt></ruby><ruby>悲<rt>ㄅㄟ</rt></ruby>',
+                plainTitle: '兔死狐悲',
+                meaning: '兔子死了，狐狸感到悲傷。比喻因同類的死亡或失敗而感到悲傷或恐懼。',
+                source: '《宋史·李全傳》/ 傳說寓言',
+                history: '傳說狐狸和兔子結為同盟，發誓要互相幫助抵抗獵人。一天，兔子被獵人射死，狐狸在旁邊痛哭流涕。長者問狐狸為何哭泣，狐狸說：「我們是抵抗獵人的同盟，今天兔子死了，明天就輪到我了，我怎能不悲傷呢？」',
+                sentence: '看到隔壁班因為作弊被全班記過，我們班也有幾個人感到兔死狐悲，決定從此誠實考試。',
+                life: '看到一起調皮的同伴被老師處罰，小剛心裡不禁湧起兔死狐悲的感覺，再也不敢搗蛋了。'
+            },
+            {
+                id: 84,
+                titleHtml: '<ruby>杯<rt>ㄅㄟ</rt></ruby><ruby>水<rt>ㄕㄨㄟˇ</rt></ruby><ruby>車<rt>ㄔㄜ</rt></ruby><ruby>薪<rt>ㄒㄧㄣ</rt></ruby>',
+                plainTitle: '杯水車薪',
+                meaning: '用一杯水去救一車著火的木柴。比喻力量太小，解決不了嚴重的問題。',
+                source: '《孟子·告子上》',
+                history: '孟子認為，人本來就有善良的本性，就像水往下流一樣自然。但他指出：「現在實行仁德的人，就像用一杯水去撲滅整車燃燒的木柴一樣；火滅不了，就說水不能滅火。這只會讓不仁不義的事情更加嚴重。」',
+                sentence: '災區需要大量的救援物資，我們捐的這點錢雖然有心，但恐怕只是杯水車薪。',
+                life: '要裝滿這個超大充氣泳池，只用小水桶慢慢倒簡直是杯水車薪，得用水管才行！'
+            },
+            {
+                id: 85,
+                titleHtml: '<ruby>門<rt>ㄇㄣˊ</rt></ruby><ruby>可<rt>ㄎㄜˇ</rt></ruby><ruby>羅<rt>ㄌㄨㄛˊ</rt></ruby><ruby>雀<rt>ㄑㄩㄝˋ</rt></ruby>',
+                plainTitle: '門可羅雀',
+                meaning: '門前冷清，空曠得可以張網捕雀。形容做官失勢或生意冷清，賓客稀少。',
+                source: '《史記·汲鄭列傳》',
+                history: '漢武帝時，大臣翟牧和鄭當時在朝廷得勢時，每天都有大批賓客來訪。後來兩人失勢丟官，賓客們便再也不上門了。司馬遷在寫到這段歷史時，引用了當時的一句諺語：「一死一生，乃知交情；一貧一富，乃知交態。」形容沒落後門前冷落得可以張網抓麻雀。',
+                sentence: '這家餐廳因為衛生問題被報導後，生意一落千丈，如今已是門可羅雀。',
+                life: '寒假期間的校園裡沒有學生，操場上門可羅雀，非常安靜。'
+            },
+            {
+                id: 86,
+                titleHtml: '<ruby>欲<rt>ㄩˋ</rt></ruby><ruby>蓋<rt>ㄍㄞˋ</rt></ruby><ruby>彌<rt>ㄇㄧˊ</rt></ruby><ruby>彰<rt>ㄓㄤ</rt></ruby>',
+                plainTitle: '欲蓋彌彰',
+                meaning: '想掩蓋壞事，結果反而暴露得更加明顯。',
+                source: '《左傳·昭公三十一年》',
+                history: '春秋時，齊國大夫邾黑肱將封地獻給魯國。魯國為了掩飾這種不合禮法的領土擴張，在史書《春秋》中不寫邾黑肱的名字。左丘明評論說：「不寫名字是想掩蓋這件事，但越是掩蓋，事情的真相反而越發明顯地暴露出來（欲蓋而彌彰）。」',
+                sentence: '他本來想用謊言掩飾遲到的原因，結果前後矛盾，真是欲蓋彌彰。',
+                life: '小兵偷吃巧克力後急忙擦嘴巴，結果把巧克力醬抹得滿臉都是，完全是欲蓋彌彰！'
+            },
+            {
+                id: 87,
+                titleHtml: '<ruby>金<rt>ㄐㄧㄣ</rt></ruby><ruby>玉<rt>ㄩˋ</rt></ruby><ruby>其<rt>ㄑㄧˊ</rt></ruby><ruby>外<rt>ㄨㄞˋ</rt></ruby>',
+                plainTitle: '金玉其外',
+                meaning: '外面像金玉般華美，裡面卻像破棉絮一樣糟糕（常連用「敗絮其中」）。比喻外表漂亮，內在卻空虛敗壞。',
+                source: '明·劉基《賣柑者言》',
+                history: '明初文學家劉基看到杭州街頭有人賣柑橘。那柑橘外表金黃閃亮、非常漂亮，買回家剝開一看，裡面的果肉卻乾枯得像破棉絮一樣。劉基責問賣柑人，賣柑人笑著說：「世上那些當大官的人，穿著華麗官服，不也是『金玉其外，敗絮其中』嗎？」',
+                sentence: '這棟大樓外觀氣派，但內部管線老舊漏水，真是金玉其外，敗絮其中。',
+                life: '這個玩具包裝盒超級大又漂亮，打開一看只有一個小塑膠人偶，真是金玉其外！'
+            },
+            {
+                id: 88,
+                titleHtml: '<ruby>投<rt>ㄊㄡˊ</rt></ruby><ruby>鼠<rt>ㄕㄨˇ</rt></ruby><ruby>忌<rt>ㄐㄧˋ</rt></ruby><ruby>器<rt>ㄑㄧˋ</rt></ruby>',
+                plainTitle: '投鼠忌器',
+                meaning: '想用東西打老鼠，又怕打壞了旁邊的器物。比喻想打擊壞人，卻因有所顧忌而不敢放手去做。',
+                source: '《漢書·賈誼傳》',
+                history: '西漢初年，有些權貴大臣驕橫跋扈，甚至觸犯法律。漢文帝詢問賈誼該如何處置。賈誼打比方說：「老鼠靠近貴重的器皿，人想打老鼠，卻怕打壞器皿而不敢動手。這些大臣就像老鼠，他們是皇上您身邊的人，懲罰他們怕傷了皇家的顏面啊。」',
+                sentence: '警方雖然知道歹徒躲在人群中，但因為投鼠忌器，不敢輕易開槍。',
+                life: '蚊子停在媽媽最喜歡的昂貴花瓶上，小明想打蚊子卻投鼠忌器，只好把蚊子趕走。'
+            },
+            {
+                id: 89,
+                titleHtml: '<ruby>盲<rt>ㄇㄤˊ</rt></ruby><ruby>人<rt>ㄖㄣˊ</rt></ruby><ruby>瞎<rt>ㄒㄧㄚ</rt></ruby><ruby>馬<rt>ㄇㄚˇ</rt></ruby>',
+                plainTitle: '盲人瞎馬',
+                meaning: '瞎子騎著瞎馬，半夜面臨深池。比喻處境極其危險。',
+                source: '《世說新語·排調》',
+                history: '東晉時，桓溫的幾個幕僚在一起玩接龍遊戲，要用一句話形容極度危險的情況。有人說：「矛頭淅星劍頭血（在戰場上廝殺）。」輪到殷浩時，他說：「盲人騎瞎馬，夜半臨深池。」大家一聽，都覺得這才是最可怕、最危險的絕境。',
+                sentence: '在沒有任何安全設備的情況下去攀登這座陡峭的雪山，無異於盲人瞎馬。',
+                life: '完全沒有複習就去參加期末考，小強覺得自己就像盲人瞎馬一樣，心裡超級慌！'
+            },
+            {
+                id: 90,
+                titleHtml: '<ruby>兵<rt>ㄅㄧㄥ</rt></ruby><ruby>不<rt>ㄅㄨˊ</rt></ruby><ruby>厭<rt>ㄧㄢˋ</rt></ruby><ruby>詐<rt>ㄓㄚˋ</rt></ruby>',
+                plainTitle: '兵不厭詐',
+                meaning: '打仗時不排斥使用欺詐的手段來迷惑敵人。',
+                source: '《韓非子·難一》',
+                history: '春秋晉楚城濮之戰前，晉文公聽說楚軍勢大，問大臣咎犯如何應對。咎犯說：「遵守禮儀的人不厭惡講求信用，但在打仗時，就不排斥使用欺詐的手段了（兵不厭詐）。」晉文公採納建議，用退避三舍、誘敵深入等計策，大敗楚軍。',
+                sentence: '在這場商戰中，對手使用了各種假消息來迷惑我們，真是兵不厭詐。',
+                life: '玩捉迷藏時，小兵故意在東邊踩出聲音然後躲到西邊，笑著說這叫兵不厭詐！'
+            }
+        ];
+
+        /* State Variables */
+        let currentVolume = 1; // 1 = Vol 1 (1~30), 2 = Vol 2 (31~60), 3 = Vol 3 (61~90), 0 = All (1~90)
+        let currentIndex = 0;
+        let favorites = JSON.parse(localStorage.getItem('minion_idiom_favs') || '[]');
+        let currentFilterFavs = false;
+        let bananaScore = parseInt(localStorage.getItem('minion_banana_score') || '0');
+        let currentQuizData = [];
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
+        // Minion Quotes Generator
+        const minionQuotes = [
+            "Bello! 今天也要跟小小兵一起快樂學成語喔！Po-ka!",
+            "Banana! 這個成語是不是超有意思？趕快把它記在腦海裡！",
+            "Tank yu! 點擊右上角星號，可以把喜歡的成語收藏起來喔！",
+            "Tulaliloo ti amo! 多讀成語典故，造句考試難不倒你！",
+            "Banana! 讀完這篇，快去挑戰『蕉級大挑戰』賺取更多香蕉吧！",
+            "Gelato! 哇！第 2 彈、第 3 彈的成語典故也超級精彩刺激呢！",
+            "Bi-do! 學完 90 組成語，你就是真正的小小兵成語博學大師！"
+        ];
+
+        /* ================= INITIALIZATION ================= */
+        window.onload = function() {
+            updateBananaBadge();
+            renderIdiomList();
+            displayIdiom(0);
+            setupSearch();
+            setupKeyboardNav();
+        };
+
+        function setVolumeFilter(vol) {
+            currentVolume = vol;
+            
+            // Update button styles
+            const btn1 = document.getElementById('vol-btn-1');
+            const btn2 = document.getElementById('vol-btn-2');
+            const btn3 = document.getElementById('vol-btn-3');
+            const btnAll = document.getElementById('vol-btn-all');
+
+            [btn1, btn2, btn3, btnAll].forEach(btn => {
+                btn.className = "px-3 py-1.5 rounded-lg font-black text-xs sm:text-sm transition text-blue-950 hover:bg-yellow-200";
+            });
+
+            if (vol === 1) {
+                btn1.className = "px-3 py-1.5 rounded-lg font-black text-xs sm:text-sm transition bg-blue-600 text-white shadow-sm";
+                displayIdiom(0);
+            } else if (vol === 2) {
+                btn2.className = "px-3 py-1.5 rounded-lg font-black text-xs sm:text-sm transition bg-blue-600 text-white shadow-sm";
+                displayIdiom(30); // Start at ID 31
+            } else if (vol === 3) {
+                btn3.className = "px-3 py-1.5 rounded-lg font-black text-xs sm:text-sm transition bg-blue-600 text-white shadow-sm";
+                displayIdiom(60); // Start at ID 61
+            } else {
+                btnAll.className = "px-3 py-1.5 rounded-lg font-black text-xs sm:text-sm transition bg-blue-600 text-white shadow-sm";
+            }
+
+            renderIdiomList();
+        }
+
+        function getFilteredIdioms() {
+            const searchVal = document.getElementById('search-input').value.trim().toLowerCase();
+            return idiomData.filter(item => {
+                const matchesVolume = (currentVolume === 0) || 
+                                     (currentVolume === 1 && item.id <= 30) || 
+                                     (currentVolume === 2 && item.id > 30 && item.id <= 60) ||
+                                     (currentVolume === 3 && item.id > 60);
+                const matchesSearch = item.plainTitle.includes(searchVal) || 
+                                      item.meaning.includes(searchVal) || 
+                                      item.history.includes(searchVal);
+                const matchesFav = currentFilterFavs ? favorites.includes(item.id) : true;
+                return matchesVolume && matchesSearch && matchesFav;
+            });
+        }
+
+        function renderIdiomList() {
+            const listContainer = document.getElementById('idiom-list');
+            listContainer.innerHTML = '';
+
+            const filtered = getFilteredIdioms();
+            document.getElementById('list-count').innerText = filtered.length;
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = `<div class="text-center py-8 text-gray-500 font-bold">沒有找到符合條件的成語喔！</div>`;
+                return;
+            }
+
+            filtered.forEach((item) => {
+                const isSelected = idiomData[currentIndex].id === item.id;
+                const isFav = favorites.includes(item.id);
+
+                let badgeColor = 'bg-blue-900 text-yellow-300'; // Vol 1
+                if (item.id > 30 && item.id <= 60) badgeColor = 'bg-amber-600 text-white'; // Vol 2
+                if (item.id > 60) badgeColor = 'bg-emerald-600 text-white'; // Vol 3
+
+                const itemCard = document.createElement('div');
+                itemCard.className = `p-3 rounded-xl border-2 cursor-pointer transition flex items-center justify-between font-bold ${
+                    isSelected 
+                    ? 'bg-amber-300 border-blue-900 text-blue-950 shadow-minion-sm' 
+                    : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-yellow-100'
+                }`;
+                
+                itemCard.onclick = () => {
+                    const realIndex = idiomData.findIndex(i => i.id === item.id);
+                    displayIdiom(realIndex);
+                };
+
+                itemCard.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-black ${badgeColor} px-2 py-0.5 rounded-full">
+                            ${String(item.id).padStart(2, '0')}
+                        </span>
+                        <span class="text-base sm:text-lg tracking-wide">${item.plainTitle}</span>
+                    </div>
+                    ${isFav ? '<i class="fa-solid fa-star text-amber-500 text-sm"></i>' : ''}
+                `;
+
+                listContainer.appendChild(itemCard);
+            });
+        }
+
+        function displayIdiom(index) {
+            if (index < 0 || index >= idiomData.length) return;
+            currentIndex = index;
+            const data = idiomData[currentIndex];
+
+            // Update DOM fields
+            document.getElementById('detail-id').innerText = String(data.id).padStart(2, '0');
+            document.getElementById('detail-title').innerHTML = data.titleHtml;
+            document.getElementById('detail-meaning').innerText = data.meaning;
+            document.getElementById('detail-source').innerText = `出處：${data.source}`;
+            document.getElementById('detail-history').innerText = data.history;
+            document.getElementById('detail-sentence').innerText = `「${data.sentence}」`;
+            document.getElementById('detail-life').innerText = data.life;
+
+            // Random Minion quote update
+            const randomQuote = minionQuotes[Math.floor(Math.random() * minionQuotes.length)];
+            document.getElementById('minion-quote').innerText = randomQuote;
+
+            // Update Favorite Star button status
+            updateFavStarUI();
+
+            // Re-render list to reflect selection state
+            renderIdiomList();
+
+            // Add banana point for reading if first time
+            addBananaPoint(data.id);
+        }
+
+        function toggleCurrentFavorite() {
+            const currentId = idiomData[currentIndex].id;
+            const favIndex = favorites.indexOf(currentId);
+            if (favIndex > -1) {
+                favorites.splice(favIndex, 1);
+            } else {
+                favorites.push(currentId);
+            }
+            localStorage.setItem('minion_idiom_favs', JSON.stringify(favorites));
+            updateFavStarUI();
+            renderIdiomList();
+            document.getElementById('fav-count').innerText = favorites.length;
+        }
+
+        function updateFavStarUI() {
+            const currentId = idiomData[currentIndex].id;
+            const starBtn = document.getElementById('fav-star-btn');
+            const isFav = favorites.includes(currentId);
+            
+            if (isFav) {
+                starBtn.className = "p-3 bg-yellow-400 hover:bg-yellow-300 text-blue-900 rounded-2xl border-2 border-blue-900 shadow-minion-sm btn-bounce text-xl";
+            } else {
+                starBtn.className = "p-3 bg-gray-100 hover:bg-yellow-100 text-gray-400 rounded-2xl border-2 border-blue-900 shadow-minion-sm btn-bounce text-xl";
+            }
+            document.getElementById('fav-count').innerText = favorites.length;
+        }
+
+        function toggleFavoritesOnly() {
+            currentFilterFavs = !currentFilterFavs;
+            const btn = document.getElementById('fav-filter-btn');
+            if (currentFilterFavs) {
+                btn.className = "px-4 py-2 bg-yellow-400 text-blue-950 rounded-xl font-black border-2 border-blue-900 shadow-minion-sm btn-bounce text-sm flex items-center gap-1";
+            } else {
+                btn.className = "px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-bold border-2 border-blue-900 shadow-minion-sm btn-bounce text-sm flex items-center gap-1";
+            }
+            renderIdiomList();
+        }
+
+        function addBananaPoint(idiomId) {
+            let readList = JSON.parse(localStorage.getItem('minion_read_list') || '[]');
+            if (!readList.includes(idiomId)) {
+                readList.push(idiomId);
+                localStorage.setItem('minion_read_list', JSON.stringify(readList));
+                bananaScore += 1;
+                localStorage.setItem('minion_banana_score', bananaScore.toString());
+                updateBananaBadge();
+            }
+        }
+
+        function updateBananaBadge() {
+            document.getElementById('banana-count').innerText = bananaScore;
+        }
+
+        function navigateIdiom(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0) newIndex = idiomData.length - 1;
+            if (newIndex >= idiomData.length) newIndex = 0;
+            displayIdiom(newIndex);
+        }
+
+        function getRandomIdiom() {
+            const randomIndex = Math.floor(Math.random() * idiomData.length);
+            displayIdiom(randomIndex);
+        }
+
+        function setupSearch() {
+            document.getElementById('search-input').addEventListener('input', () => {
+                renderIdiomList();
+            });
+        }
+
+        function setupKeyboardNav() {
+            document.addEventListener('keydown', (e) => {
+                if (document.getElementById('section-learn').classList.contains('hidden')) return;
+                if (e.key === 'ArrowLeft') navigateIdiom(-1);
+                if (e.key === 'ArrowRight') navigateIdiom(1);
+            });
+        }
+
+        function speakCurrentIdiom() {
+            if (!('speechSynthesis' in window)) {
+                alert('抱歉，您的瀏覽器不支援語音朗讀功能！');
+                return;
+            }
+            
+            window.speechSynthesis.cancel(); // Stop active speech
+
+            const data = idiomData[currentIndex];
+            const textToSpeak = `${data.plainTitle}。解釋：${data.meaning}。造句：${data.sentence}`;
+
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'zh-TW';
+            utterance.rate = 0.9; // Slightly slower for primary students
+            utterance.pitch = 1.1; // Friendly pitch
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function showSection(section) {
+            const learnSec = document.getElementById('section-learn');
+            const quizSec = document.getElementById('section-quiz');
+            const tabLearn = document.getElementById('tab-learn');
+            const tabQuiz = document.getElementById('tab-quiz');
+
+            if (section === 'learn') {
+                learnSec.classList.remove('hidden');
+                quizSec.classList.add('hidden');
+                tabLearn.className = "px-4 py-2 bg-blue-600 text-white rounded-xl font-bold border-2 border-blue-950 shadow-minion-sm btn-bounce text-sm sm:text-base flex items-center gap-1";
+                tabQuiz.className = "px-4 py-2 bg-yellow-400 text-blue-950 rounded-xl font-bold border-2 border-blue-950 shadow-minion-sm btn-bounce text-sm sm:text-base flex items-center gap-1";
+            } else {
+                learnSec.classList.add('hidden');
+                quizSec.classList.remove('hidden');
+                tabQuiz.className = "px-4 py-2 bg-blue-600 text-white rounded-xl font-bold border-2 border-blue-950 shadow-minion-sm btn-bounce text-sm sm:text-base flex items-center gap-1";
+                tabLearn.className = "px-4 py-2 bg-yellow-400 text-blue-950 rounded-xl font-bold border-2 border-blue-950 shadow-minion-sm btn-bounce text-sm sm:text-base flex items-center gap-1";
+                startQuiz();
+            }
+        }
+
+        function startQuiz() {
+            document.getElementById('quiz-active').classList.remove('hidden');
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-feedback').classList.add('hidden');
+
+            // Pick 5 random idioms
+            const shuffled = [...idiomData].sort(() => 0.5 - Math.random());
+            currentQuizData = shuffled.slice(0, 5);
+            currentQuizIndex = 0;
+            quizScore = 0;
+
+            document.getElementById('quiz-score').innerText = quizScore;
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            if (currentQuizIndex >= currentQuizData.length) {
+                finishQuiz();
+                return;
+            }
+
+            const currentItem = currentQuizData[currentQuizIndex];
+            document.getElementById('quiz-current-num').innerText = currentQuizIndex + 1;
+            document.getElementById('quiz-feedback').classList.add('hidden');
+
+            // Randomize Question Type (0: Meaning -> Find Idiom, 1: Fill Gap Sentence)
+            const qType = Math.random() > 0.5 ? 0 : 1;
+            let questionText = "";
+            
+            if (qType === 0) {
+                questionText = `請問哪一個成語的意思是：「${currentItem.meaning}」？`;
+            } else {
+                const maskedSentence = currentItem.sentence.replace(currentItem.plainTitle, "（ ？？？？ ）");
+                questionText = `請選出最適合填入空格中的成語：<br><span class="text-blue-900 font-bold">${maskedSentence}</span>`;
+            }
+
+            document.getElementById('quiz-question').innerHTML = questionText;
+
+            // Options preparation
+            let options = [currentItem.plainTitle];
+            while (options.length < 4) {
+                const randomOther = idiomData[Math.floor(Math.random() * idiomData.length)].plainTitle;
+                if (!options.includes(randomOther)) {
+                    options.push(randomOther);
+                }
+            }
+            options.sort(() => 0.5 - Math.random());
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 bg-gray-50 hover:bg-yellow-200 text-blue-950 font-black text-lg rounded-2xl border-2 border-blue-900 shadow-minion-sm btn-bounce transition text-center";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(opt, currentItem.plainTitle);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selected, correct) {
+            const feedbackEl = document.getElementById('quiz-feedback');
+            feedbackEl.classList.remove('hidden');
+
+            // Disable option buttons
+            const buttons = document.querySelectorAll('#quiz-options button');
+            buttons.forEach(b => b.disabled = true);
+
+            if (selected === correct) {
+                quizScore += 20;
+                document.getElementById('quiz-score').innerText = quizScore;
+                feedbackEl.className = "p-4 rounded-2xl font-black text-center text-lg border-2 bg-emerald-100 text-emerald-900 border-emerald-400";
+                feedbackEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Bello! 答對了！太棒了！`;
+            } else {
+                feedbackEl.className = "p-4 rounded-2xl font-black text-center text-lg border-2 bg-rose-100 text-rose-900 border-rose-400";
+                feedbackEl.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> 答錯囉！正確答案是：<span class="underline">${correct}</span>`;
+            }
+
+            setTimeout(() => {
+                currentQuizIndex++;
+                renderQuizQuestion();
+            }, 1800);
+        }
+
+        function finishQuiz() {
+            document.getElementById('quiz-active').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('hidden');
+            document.getElementById('quiz-final-score').innerHTML = `你在 5 題中答對了 <span class="text-amber-600 text-4xl font-black">${quizScore / 20}</span> 題！`;
+
+            let comment = "";
+            if (quizScore === 100) {
+                comment = "Banana! 簡直是成語小學霸！Bob & Kevin 佩服得五體投地！";
+            } else if (quizScore >= 60) {
+                comment = " Bello! 表現得非常優秀喔！再複習一下就可以拿滿分啦！";
+            } else {
+                comment = " Po-ka! 別灰心，多回到『成語庫』看幾遍典故故事吧！";
+            }
+            document.getElementById('quiz-comment').innerText = comment;
+
+            // Bonus Bananas added to global score
+            bananaScore += Math.floor(quizScore / 20);
+            localStorage.setItem('minion_banana_score', bananaScore.toString());
+            updateBananaBadge();
+        }
+    </script>
+</body>
+</html>
